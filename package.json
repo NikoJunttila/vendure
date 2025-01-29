@@ -1,0 +1,34 @@
+{
+  "name": "my-shop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:server": "ts-node ./src/index.ts",
+    "dev:worker": "ts-node ./src/index-worker.ts",
+    "dev": "concurrently npm:dev:*",
+    "build": "tsc",
+    "start:server": "node ./dist/index.js",
+    "start:worker": "node ./dist/index-worker.js",
+    "start": "concurrently npm:start:*",
+    "migration:generate": "ts-node migration generate",
+    "migration:run": "ts-node migration run",
+    "migration:revert": "ts-node migration revert"
+  },
+  "dependencies": {
+    "@apollo/datasource-rest": "^6.4.1",
+    "@paytrail/paytrail-js-sdk": "^1.0.3",
+    "@vendure/admin-ui-plugin": "3.1.2",
+    "@vendure/asset-server-plugin": "3.1.2",
+    "@vendure/core": "3.1.2",
+    "@vendure/email-plugin": "3.1.2",
+    "better-sqlite3": "9.6.0",
+    "dotenv": "16.4.7",
+    "stripe": "^17.6.0",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "@vendure/cli": "3.1.2",
+    "concurrently": "9.1.2",
+    "typescript": "5.3.3"
+  }
+}
