@@ -12,7 +12,8 @@
     "start": "concurrently npm:start:*",
     "migration:generate": "ts-node migration generate",
     "migration:run": "ts-node migration run",
-    "migration:revert": "ts-node migration revert"
+    "migration:revert": "ts-node migration revert",
+    "populate": "ts-node populate.ts"
   },
   "dependencies": {
     "@apollo/datasource-rest": "^6.4.1",
@@ -28,6 +29,8 @@
   },
   "devDependencies": {
     "@vendure/cli": "3.1.2",
+    "@vendure/create": "^3.1.2",
+    "@vendure/testing": "^3.1.2",
     "concurrently": "9.1.2",
     "typescript": "5.3.3"
   }

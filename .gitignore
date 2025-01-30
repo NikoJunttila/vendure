@@ -5,3 +5,4 @@ static/assets
 static/email/test-emails
 src/migrations
 .env
+vendure.sqlite

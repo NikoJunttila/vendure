@@ -13,6 +13,7 @@ import { vasteFulfillmentHandler } from './shipping/fulfillment/vaste-fulfillmen
 import { PostalCodeChecker } from './shipping/shipping-methods/shipping-eligibility-checker';
 import { VasteShippingCalculator } from './shipping/shipping-methods/vaste-shipping-calculator';
 import { PickupStore } from './shipping/shipping-methods/pickup-plugin';
+import { manualFulfillmentHandler } from '@vendure/core';
 import 'dotenv/config';
 import path from 'path';
 
@@ -71,6 +72,7 @@ export const config: VendureConfig = {
         ],
         fulfillmentHandlers: [
           vasteFulfillmentHandler,
+          manualFulfillmentHandler,
         ]
     },
     // When adding or altering custom field definitions, the database will
@@ -83,14 +85,12 @@ export const config: VendureConfig = {
             { name: 'pickupCity', type: 'string' },
             { name: 'Email', type: 'string' },
             { name: 'Phone', type: 'string' },
-            { name: 'stripeAccountId', type: 'string' }
         ],
         Order: [
             { name: 'VasteCode', type: 'string' },
             { name: 'dateString', type: 'string'},
             { name: 'dateTime', type: 'datetime'},
             { name: 'ToimitusInfo', type:'string'},
-            { name: 'PaytrailID', type: 'string'},
         ],
         Fulfillment: [
             { name: 'vasteOrderId', type: 'string' }
@@ -107,7 +107,7 @@ export const config: VendureConfig = {
             // For local dev, the correct value for assetUrlPrefix should
             // be guessed correctly, but for production it will usually need
             // to be set manually to match your production url.
-            assetUrlPrefix: IS_DEV ? undefined : url + '/assets/',
+            assetUrlPrefix: IS_DEV ? undefined : URL + '/assets/',
         }),
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
         DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
