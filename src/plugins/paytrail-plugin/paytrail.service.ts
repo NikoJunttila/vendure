@@ -36,8 +36,8 @@ export class PaytrailService {
                  email: order.customer.emailAddress,
                 }, 
                 redirectUrls: {
-                  success: `${url}/checkout/trailsuccess/${order.code}`,
-                  cancel: `${url}/cancel`
+                  success: `${process.env.paytrail_success_redirect}/${order.code}`,
+                  cancel: `${process.env.paytrail_cancel_redirect}`
                 }
             };
 
