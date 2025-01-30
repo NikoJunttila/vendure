@@ -124,12 +124,17 @@ async createMultiPayment(ctx: RequestContext, order: Order): Promise<any> {
             description: "palvelu maksu",
             merchant,
             stamp:uuidv4(),
-            reference:uuidv4()
+            reference:uuidv4(),
             }
             data.items!.push(orderShippingItem)
             Logger.debug(JSON.stringify(data, null, 2), loggerCtx);
+            console.log("data:", data)
+            //@ts-ignore
+            for (const item of data.items){
+                console.log(JSON.stringify(item))
+            }
+            console.log(JSON.stringify(data.items))
             const paytrailRes = await paytrail.createShopInShopPayment(data);
-            console.log("pt res:", paytrailRes)
 
             Logger.debug(JSON.stringify(paytrailRes, null, 2), loggerCtx);
             if (paytrailRes.status === 400){

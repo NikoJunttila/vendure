@@ -12,6 +12,7 @@ import { PostalCodeChecker } from './shipping-eligibility-checker';
  */
 @VendurePlugin({
     imports: [PluginCommonModule],
+    compatibility: '^3.0.0',
     controllers: [],
     providers: [],
     configuration: config => {

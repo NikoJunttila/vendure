@@ -27,7 +27,6 @@ export const generateOrderLines = (orderLines: OrderLine[]): PaytrailItem[] => {
  * @returns paytrail OrderLine, consisting of Vendure OrderLines.
  */
 export const generateMultiOrderLines = (orderLines: OrderLine[], merchant : string): PaytrailItem[] => {
-
     const order_lines: any[] = orderLines.map((line) => (
         {
             unitPrice: line?.unitPriceWithTax,
@@ -40,7 +39,7 @@ export const generateMultiOrderLines = (orderLines: OrderLine[], merchant : stri
             merchant:merchant,
             commission:{
                 merchant,
-                amount: line?.unitPriceWithTax / 10
+                amount: Math.ceil(line?.unitPriceWithTax / 100)
             }
         }
     ));
