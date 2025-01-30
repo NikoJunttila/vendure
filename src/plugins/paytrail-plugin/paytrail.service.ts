@@ -128,12 +128,6 @@ async createMultiPayment(ctx: RequestContext, order: Order): Promise<any> {
             }
             data.items!.push(orderShippingItem)
             Logger.debug(JSON.stringify(data, null, 2), loggerCtx);
-            console.log("data:", data)
-            //@ts-ignore
-            for (const item of data.items){
-                console.log(JSON.stringify(item))
-            }
-            console.log(JSON.stringify(data.items))
             const paytrailRes = await paytrail.createShopInShopPayment(data);
 
             Logger.debug(JSON.stringify(paytrailRes, null, 2), loggerCtx);

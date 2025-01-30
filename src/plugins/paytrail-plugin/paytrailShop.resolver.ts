@@ -65,7 +65,6 @@ export class PaytrailShopResolver {
         if (orderFull){
         const paymentResult = await this.paytrailService.createMultiPayment(ctx, orderFull);
         //console.log("payment result: ",paymentResult)
-        console.log(paymentResult)
         if (paymentResult.metadata.paytrail.data.href) {
             return {
                 href: paymentResult.metadata.paytrail.data.href,
