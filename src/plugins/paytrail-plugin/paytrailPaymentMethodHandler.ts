@@ -17,8 +17,8 @@ import {
 import { LanguageCode, RefundOrderInput } from '@vendure/common/lib/generated-types';
 import { loggerCtx } from './constants';
 import { PaytrailClient, CreateRefundRequest, CreateRefundParams, CallbackUrl } from "@paytrail/paytrail-js-sdk";
-import { VasteAPI } from '../../shipping/shipping-methods/vaste-data-source';
-import { parseDeliveryDateTime } from '../../shipping/fulfillment/vaste-fulfillment-handler';
+import { VasteAPI } from '../vaste-plugin/vaste-data-source';
+import { parseDeliveryDateTime } from '../vaste-plugin/vaste-fulfillment-handler';
 import { VasteOrder } from '../../types/vaste-types';
 import type { KeyValueCache } from '@apollo/utils.keyvaluecache';
 

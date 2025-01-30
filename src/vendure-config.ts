@@ -9,11 +9,10 @@ import { AssetServerPlugin } from '@vendure/asset-server-plugin';
 import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
 import { StripePlugin } from './plugins/stripe';
 import { PaytrailPaymentsPlugin } from './plugins/paytrail-plugin/paytrail-plugin';
-import { vasteFulfillmentHandler } from './shipping/fulfillment/vaste-fulfillment-handler';
-import { PostalCodeChecker } from './shipping/shipping-methods/shipping-eligibility-checker';
-import { VasteShippingCalculator } from './shipping/shipping-methods/vaste-shipping-calculator';
 import { PickupStore } from './shipping/shipping-methods/pickup-plugin';
 import { manualFulfillmentHandler } from '@vendure/core';
+import { PickupFromStorePayment } from './shipping/shipping-methods/pickupPayment';
+import { VastePlugin } from './plugins/vaste-plugin/vaste.plugin';
 import 'dotenv/config';
 import path from 'path';
 
@@ -63,41 +62,22 @@ export const config: VendureConfig = {
         paymentMethodHandlers: [dummyPaymentHandler],
     },
     shippingOptions: {
-        shippingCalculators: [
-            VasteShippingCalculator,
+        shippingCalculators:[
+            PickupFromStorePayment
         ],
         shippingEligibilityCheckers: [
-            PostalCodeChecker,
             PickupStore
         ],
         fulfillmentHandlers: [
-          vasteFulfillmentHandler,
           manualFulfillmentHandler,
         ]
     },
     // When adding or altering custom field definitions, the database will
     // need to be updated. See the "Migrations" section in README.md.
-    customFields: {
-        Seller: [
-            { name: 'pickupAddress', type: 'string' },
-            { name: 'pickupApartment', type: 'string' },
-            { name: 'pickupPostalCode', type: 'string' },
-            { name: 'pickupCity', type: 'string' },
-            { name: 'Email', type: 'string' },
-            { name: 'Phone', type: 'string' },
-        ],
-        Order: [
-            { name: 'VasteCode', type: 'string' },
-            { name: 'dateString', type: 'string'},
-            { name: 'dateTime', type: 'datetime'},
-            { name: 'ToimitusInfo', type:'string'},
-        ],
-        Fulfillment: [
-            { name: 'vasteOrderId', type: 'string' }
-        ],
-    },
+    customFields: {},
     plugins: [
         PaytrailPaymentsPlugin.init(),
+        VastePlugin.init(),
         StripePlugin.init({
             storeCustomersInStripe: true,
         }),

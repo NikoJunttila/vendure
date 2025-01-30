@@ -1,6 +1,6 @@
 import {Order,SellerService,FulfillmentHandler, LanguageCode, Injector, EntityHydrator } from '@vendure/core';
 
-import {VasteAPI} from '../shipping-methods/vaste-data-source';
+import {VasteAPI} from './vaste-data-source';
 import {VasteOrder} from '../../types/vaste-types';
 import type {KeyValueCache} from '@apollo/utils.keyvaluecache';
 
