@@ -9,35 +9,7 @@ var fulfillmentCache: KeyValueCache;
 let entityHydrator: EntityHydrator;
 let sellerService : SellerService;
 
-export function parseDeliveryDateTime(dateTimeString : any) {
-  // Parse the ISO string into Date objects
-  const startDate = new Date(dateTimeString);
-  const stopDate = new Date(dateTimeString);
-  
-  // Add hours. dunno why
-  startDate.setUTCHours(stopDate.getUTCHours() + 2);
-  stopDate.setUTCHours(stopDate.getUTCHours() + 4);
-  
-  // Format the date as YYYY-MM-DD
-  const formattedDate = startDate.toISOString().split('T')[0];
-  
-  // Format the start time as HH:mm
-  const startHours = startDate.getUTCHours().toString().padStart(2, '0');
-  const startMinutes = startDate.getUTCMinutes().toString().padStart(2, '0');
-  const formattedStartTime = `${startHours}:${startMinutes}`;
-  
-  // Format the stop time as HH:mm
-  const stopHours = stopDate.getUTCHours().toString().padStart(2, '0');
-  const stopMinutes = stopDate.getUTCMinutes().toString().padStart(2, '0');
-  const formattedStopTime = `${stopHours}:${stopMinutes}`;
-  
-  return {
-    deliveryDateStart: formattedDate,
-    deliveryDateStop: formattedDate,
-    deliveryTimeStart: formattedStartTime,
-    deliveryTimeStop: formattedStopTime
-  };
-}
+
 
 export const vasteFulfillmentHandler = new FulfillmentHandler({
     code:'vaste',

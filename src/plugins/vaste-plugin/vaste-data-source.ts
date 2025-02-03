@@ -60,10 +60,7 @@ export class VasteAPI extends RESTDataSource{
     deliveryCount: number, 
     destinationType: string
 ): Promise<VasteOrderResponse> {
-    console.log("this._apikey before order: ",this._apikey)
     const apikey = await this.getApiKey()
-    console.log(apikey)
-    console.log("this._apikey after getapi call: ", this._apikey)
     const requestBody = `senderLastname=${encodeURIComponent(senderLastname)}`+
         `&senderFirstname=${encodeURIComponent(senderFirstname)}`+
         `&senderPhone=${encodeURIComponent(senderPhone)}`+
@@ -100,9 +97,6 @@ export class VasteAPI extends RESTDataSource{
         `&apikey=${encodeURIComponent(apikey)}`+
         `&api_key=${encodeURIComponent(apikey)}`+
         `&environment=${encodeURIComponent(process.env.VASTE_ENV)}`;
-
-    console.log('Request Body:', requestBody);
- 
     try {
         const response = await this.post('tilaus', {
             body: requestBody,

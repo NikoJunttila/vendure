@@ -81,6 +81,26 @@ import { PostalCodeChecker } from './shipping-eligibility-checker';
                 ],
                 nullable: true,
                 public: true,
+            },
+            {
+                name: 'firstName',
+                type: 'string',
+                label: [
+                    { languageCode: LanguageCode.en, value: 'First Name' },
+                    { languageCode: LanguageCode.fi, value: 'Etunimi' }
+                ],
+                nullable: true,
+                public: true,
+            },
+            {
+                name: 'lastName',
+                type: 'string',
+                label: [
+                    { languageCode: LanguageCode.en, value: 'Last Name' },
+                    { languageCode: LanguageCode.fi, value: 'Sukunimi' }
+                ],
+                nullable: true,
+                public: true,
             }
         );
 

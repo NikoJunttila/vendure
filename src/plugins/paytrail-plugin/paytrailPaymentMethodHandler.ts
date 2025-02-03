@@ -18,7 +18,7 @@ import { LanguageCode, RefundOrderInput } from '@vendure/common/lib/generated-ty
 import { loggerCtx } from './constants';
 import { PaytrailClient, CreateRefundRequest, CreateRefundParams, CallbackUrl } from "@paytrail/paytrail-js-sdk";
 import { VasteAPI } from '../vaste-plugin/vaste-data-source';
-import { parseDeliveryDateTime } from '../vaste-plugin/vaste-fulfillment-handler';
+import { parseDeliveryDateTime } from '../vaste-plugin/helpers';
 import { VasteOrder } from '../../types/vaste-types';
 import type { KeyValueCache } from '@apollo/utils.keyvaluecache';
 
@@ -59,6 +59,8 @@ export const paytrailPaymentMethodHandler = new PaymentMethodHandler({
     init: (injector: Injector) => {
         entityHydrator = injector.get(EntityHydrator);
         orderService = injector.get(OrderService);
+        fulfillmentCache = new Map() as unknown as KeyValueCache;
+
     },
 
     createPayment: async (ctx: RequestContext, order: Order, amount: number, args: Record<string, any>, metadata: PaymentMetadata): Promise<CreatePaymentResult> => {
@@ -68,9 +70,10 @@ export const paytrailPaymentMethodHandler = new PaymentMethodHandler({
         const transactionId = metadata.transActionCode
         // here update the order customField PaytrailID to be transactionID
         try {
-            await orderService.updateCustomFields(ctx, order.id, {
-                PaytrailID: transactionId
+            const res = await orderService.updateCustomFields(ctx, order.id, {
+                PaytrailId: transactionId
             })
+            console.log(res)
         } catch (err) {
             console.error(err)
         }
@@ -81,6 +84,7 @@ export const paytrailPaymentMethodHandler = new PaymentMethodHandler({
                 metadata: {},
             }
         }
+        console.error("paytrail no hmac validation")
         return {
             amount: order.totalWithTax,
             state: "Declined",

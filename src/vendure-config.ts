@@ -17,6 +17,8 @@ import { PickupStore } from "./shipping/shipping-methods/pickup-plugin";
 import { manualFulfillmentHandler } from "@vendure/core";
 import { PickupFromStorePayment } from "./shipping/shipping-methods/pickupPayment";
 import { VastePlugin } from "./plugins/vaste-plugin/vaste.plugin";
+import { MultivendorPlugin } from "./plugins/multivendor-plugin/multivendor.plugin";
+
 import "dotenv/config";
 import path from "path";
 
@@ -80,6 +82,10 @@ export const config: VendureConfig = {
   // need to be updated. See the "Migrations" section in README.md.
   customFields: {},
   plugins: [
+    MultivendorPlugin.init({
+        platformFeePercent: 0,
+        platformFeeSKU: "FEE"
+    }),
     PaytrailPaymentsPlugin.init(),
     VastePlugin.init(),
     StripePlugin.init({
