@@ -3,12 +3,15 @@ import {
   DefaultJobQueuePlugin,
   DefaultSearchPlugin,
   VendureConfig,
+  LogLevel,
+  DefaultLogger,
+  defaultShippingCalculator
 } from "@vendure/core";
 import {
-  defaultEmailHandlers,
   EmailPlugin,
   FileBasedTemplateLoader,
 } from "@vendure/email-plugin";
+import { EmailHandlers } from "./Email/Emailhandler";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
 import { StripePlugin } from "./plugins/stripe";
@@ -27,6 +30,7 @@ const serverPort = +process.env.PORT || 3000;
 const URL = !IS_DEV ? process.env.PROD_URL : "http://localhost:5173";
 
 export const config: VendureConfig = {
+  logger: new DefaultLogger({ level: LogLevel.Debug, timestamp: false }),
   apiOptions: {
     port: serverPort,
     adminApiPath: "admin-api",
@@ -55,6 +59,10 @@ export const config: VendureConfig = {
     },
     cookieOptions: {
       secret: process.env.COOKIE_SECRET,
+      name: {
+        shop: "session",
+        admin: "admin-session"
+      }
     },
   },
   dbConnectionOptions: {
@@ -74,7 +82,7 @@ export const config: VendureConfig = {
     paymentMethodHandlers: [dummyPaymentHandler],
   },
   shippingOptions: {
-    shippingCalculators: [PickupFromStorePayment],
+    shippingCalculators: [PickupFromStorePayment, defaultShippingCalculator],
     shippingEligibilityCheckers: [PickupStore],
     fulfillmentHandlers: [manualFulfillmentHandler],
   },
@@ -105,7 +113,7 @@ export const config: VendureConfig = {
       devMode: true,
       outputPath: path.join(__dirname, "../static/email/test-emails"),
       route: "mailbox",
-      handlers: defaultEmailHandlers,
+      handlers: EmailHandlers,
       templateLoader: new FileBasedTemplateLoader(
         path.join(__dirname, "../static/email/templates")
       ),

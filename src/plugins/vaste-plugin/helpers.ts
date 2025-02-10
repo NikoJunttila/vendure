@@ -1,6 +1,6 @@
 import { VasteAPI } from "./vaste-data-source";
 import type { KeyValueCache } from '@apollo/utils.keyvaluecache';
-import { VasteOrderResponse, VasteOrder } from "src/types/vaste-types";
+import { VasteOrderResponse, VasteOrder } from "src/plugins/vaste-plugin/vaste-types";
 
 
 export function parseDeliveryDateTime(dateTimeString : any) {
@@ -41,26 +41,25 @@ export async function vendureDataToVaste(order:any, seller:any): Promise<string>
             const vaste = new VasteAPI(options);
             const dateStart = new Date();
             // Parse delivery date time
-            //@ts-ignore
             const result = parseDeliveryDateTime(order.customFields.dateTime);
-
+            //vaste create order gives 504 timeout if field is empty
             const vasteOrder: VasteOrder = {
-                senderLastname: "cats",
-                senderFirstname: "<3",
-                senderEmail: seller.customFields.Email,
-                senderPhone: seller.customFields.Phone,
-                pickupAddress: seller.customFields.pickupAddress,
-                pickupApartment:seller.customFields.pickupApartment,
-                pickupPostal: seller.customFields.pickupPostalCode,
-                pickupCity: seller.customFields.pickupCity,
+                senderLastname: seller.customFields.lastName || "undefined",
+                senderFirstname: seller.customFields.firstName || "undefined",
+                senderEmail: seller.customFields.Email || "undefined",
+                senderPhone: seller.customFields.Phone || "undefined",
+                pickupAddress: seller.customFields.pickupAddress || "",
+                pickupApartment:seller.customFields.pickupApartment || "",
+                pickupPostal: seller.customFields.pickupPostalCode || "",
+                pickupCity: seller.customFields.pickupCity || "",
                 pickupDateStart: `${dateStart.getFullYear()}-${(1 + dateStart.getMonth()).toString().padStart(2, "0")}-${dateStart.getDate().toString().padStart(2, "0")}`,
                 pickupDateStop: `${dateStart.getFullYear()}-${(1 + dateStart.getMonth()).toString().padStart(2, "0")}-${dateStart.getDate().toString().padStart(2, "0")}`,
                 pickupTimeStart: `${dateStart.getHours().toString().padStart(2, "0")}:${dateStart.getMinutes().toString().padStart(2, "0")}`,
                 pickupTimeStop: `${dateStart.getHours().toString().padStart(2, "0")}:${dateStart.getMinutes().toString().padStart(2, "0")}`,
-                receiverLastname: order?.customer?.lastName || "",
-                receiverFirstname: order?.customer?.firstName || "",
-                receiverPhone: order?.customer.phoneNumber || "",
-                receiverEmail: order.customer?.emailAddress || "",
+                receiverLastname: order?.customer?.lastName || "undefined",
+                receiverFirstname: order?.customer?.firstName || "undefined",
+                receiverPhone: order?.customer.phoneNumber || "undefined",
+                receiverEmail: order.customer?.emailAddress || "undefined",
                 deliveryAddress: order?.shippingAddress?.streetLine1 || "",
                 deliveryApartment: order?.shippingAddress?.streetLine2 || "",
                 deliveryPostal: order?.shippingAddress?.postalCode || "",

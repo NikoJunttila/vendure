@@ -115,7 +115,7 @@ async afterSellerOrdersCreated(ctx: RequestContext, aggregateOrder: Order, selle
         const vasteCode = await vendureDataToVaste(aggregateOrder,sellerChannel.seller)
         console.log("code: ", vasteCode)
         sellerOrder.customFields = { ...aggregateOrder.customFields };
-        //@ts-ignore
+
         sellerOrder.customFields.VasteCode = vasteCode
          
         // Add platform fee surcharge

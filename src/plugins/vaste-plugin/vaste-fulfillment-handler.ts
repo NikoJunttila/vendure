@@ -1,7 +1,7 @@
 import {Order,SellerService,FulfillmentHandler, LanguageCode, Injector, EntityHydrator } from '@vendure/core';
 
 import {VasteAPI} from './vaste-data-source';
-import {VasteOrder} from '../../types/vaste-types';
+import {VasteOrder} from './vaste-types';
 import type {KeyValueCache} from '@apollo/utils.keyvaluecache';
 
 let vaste: VasteAPI;
@@ -141,7 +141,6 @@ createFulfillment: async (ctx, orders, lines, args ) => {
     } */
     return {
             method: `Vaste kotiinkuljetus`,
-            //@ts-ignore
             trackingCode: order.customFields.VasteCode
         };
 },

@@ -1,5 +1,5 @@
 import { LanguageCode, ShippingEligibilityChecker } from '@vendure/core';
-import { postalCodeChecker } from 'src/types/vaste-types';
+import { postalCodeChecker } from 'src/plugins/vaste-plugin/vaste-types';
 export const PostalCodeChecker = new ShippingEligibilityChecker({
     code: 'postal-code-checker',
     description: [

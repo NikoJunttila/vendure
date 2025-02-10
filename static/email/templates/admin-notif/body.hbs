@@ -1,4 +1,4 @@
-{{> header title="Order Receipt" }}
+{{> header title="New order" }}
 
 <mj-raw>
     <style type="text/css">
@@ -41,10 +41,7 @@
 <mj-section css-class="bg-off-white">
     <mj-column>
         <mj-text>
-            Dear {{ order.customer.firstName }} {{ order.customer.lastName }},
-        </mj-text>
-        <mj-text>
-            Thank you for your order!
+            New order
         </mj-text>
     </mj-column>
 </mj-section>
@@ -61,7 +58,7 @@
     </mj-column>
     <mj-column>
         <mj-text css-class="callout-large"><strong>Total Price</strong></mj-text>
-        <mj-text css-class="callout-small">${{ formatMoney order.total }}</mj-text>
+        <mj-text css-class="callout-small">${{ formatMoney order.totalWithTax }}</mj-text>
     </mj-column>
 </mj-section>
 

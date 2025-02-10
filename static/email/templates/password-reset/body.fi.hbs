@@ -1,0 +1,24 @@
+{{> header title="Unohtuneen salasanan palautus" }}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text color="#525252">
+              Joku pyysi uutta salasanaa tilillesi.
+        </mj-text>
+
+        <mj-button font-family="Helvetica"
+                   background-color="#f45e43"
+                   color="white"
+                   href="{{ passwordResetUrl }}?token={{ passwordResetToken }}">
+            Resetoi salasana
+        </mj-button>
+
+        <mj-text color="#525252">
+        Jos et ole esittänyt tätä pyyntöä, voit jättää tämän sähköpostiviestin huomiotta - mitään ei ole muutettu tililläsi.
+        </mj-text>
+
+    </mj-column>
+</mj-section>
+
+
+{{> footer }}

@@ -1,4 +1,4 @@
-{{> header title="Order Receipt" }}
+{{> header title="Tilauskuitti" }}
 
 <mj-raw>
     <style type="text/css">
@@ -41,10 +41,14 @@
 <mj-section css-class="bg-off-white">
     <mj-column>
         <mj-text>
-            Dear {{ order.customer.firstName }} {{ order.customer.lastName }},
+            Arvoisa {{ order.customer.firstName }} {{ order.customer.lastName }},
         </mj-text>
         <mj-text>
-            Thank you for your order!
+            Kiitos tilauksesta!
+        </mj-text>
+        <mj-text>
+            Tilauksiin liittyvissä kysymyksissä voit ottaa yhteyttä Louen kyläkauppaan: loue@m-ketju.fi, Puh: 044 238 8977
+            Ja valitessasi noudon voit hakea tuotteet osoitteesta: Nelostie 2391 Loue, 95340
         </mj-text>
     </mj-column>
 </mj-section>
@@ -52,16 +56,16 @@
 
 <mj-section css-class="callout">
     <mj-column>
-        <mj-text css-class="callout-large"><strong>Order Code</strong></mj-text>
+        <mj-text css-class="callout-large"><strong>Tilausnumero</strong></mj-text>
         <mj-text css-class="callout-small">{{ order.code }}</mj-text>
     </mj-column>
     <mj-column>
-        <mj-text css-class="callout-large"><strong>Order Date</strong></mj-text>
+        <mj-text css-class="callout-large"><strong>Tilaus päivä</strong></mj-text>
         <mj-text css-class="callout-small">{{ formatDate order.orderPlacedAt }}</mj-text>
     </mj-column>
     <mj-column>
-        <mj-text css-class="callout-large"><strong>Total Price</strong></mj-text>
-        <mj-text css-class="callout-small">${{ formatMoney order.total }}</mj-text>
+        <mj-text css-class="callout-large"><strong>Yhteishinta</strong></mj-text>
+        <mj-text css-class="callout-small">€{{ formatMoney order.totalWithTax }}</mj-text>
     </mj-column>
 </mj-section>
 
@@ -70,7 +74,7 @@
     <mj-column>
         <mj-text>
             {{#with order.shippingAddress }}
-                <h3>Shipping To: {{ fullName }}</h3>
+                <h3>Tilaus osoite: {{ fullName }}</h3>
                 <ul class="address">
                     {{#if company}}<li>{{ company }}</li>{{/if}}
                     {{#if streetLine1}}<li>{{ streetLine1 }}</li>{{/if}}
@@ -89,7 +93,7 @@
 <mj-section>
     <mj-column>
         <mj-text>
-            <h3>Order Summary:</h3>
+            <h3>Tilauksen yhteenveto:</h3>
         </mj-text>
         <mj-table cellpadding="6px">
             {{#each order.lines }}
@@ -101,7 +105,7 @@
                     </td>
                     <td>{{ quantity }} x {{ productVariant.name }}</td>
                     <td>{{ productVariant.quantity }}</td>
-                    <td>${{ formatMoney discountedLinePriceWithTax }}</td>
+                    <td>€{{ formatMoney discountedLinePriceWithTax }}</td>
                 </tr>
             {{/each}}
             {{#each order.discounts }}
@@ -109,22 +113,22 @@
                     <td colspan="3">
                         {{ description }}
                     </td>
-                    <td>${{ formatMoney amount }}</td>
+                    <td>€{{ formatMoney amount }}</td>
                 </tr>
             {{/each}}
             <tr class="order-row">
-                <td colspan="3">Sub-total:</td>
-                <td>${{ formatMoney order.subTotalWithTax }}</td>
+                <td colspan="3">Välisumma:</td>
+                <td>€{{ formatMoney order.subTotalWithTax }}</td>
             </tr>
             {{#each shippingLines }}
             <tr class="order-row">
-                <td colspan="3">Shipping ({{ shippingMethod.name }}) Time: {{../dateString}}:</td>
-                <td>${{ formatMoney priceWithTax }}</td>
+                <td colspan="3">{{ shippingMethod.name }} aika: {{../dateString}}</td>
+                <td>€{{ formatMoney priceWithTax }}</td>
             </tr>
             {{/each}}
             <tr class="order-row total-row">
-                <td colspan="3">Total:</td>
-                <td>${{ formatMoney order.totalWithTax }}</td>
+                <td colspan="3">Yhteensä:</td>
+                <td>€{{ formatMoney order.totalWithTax }}</td>
             </tr>
         </mj-table>
     </mj-column>

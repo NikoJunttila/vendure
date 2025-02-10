@@ -1,6 +1,5 @@
-//@ts-nocheck
 import {RESTDataSource} from '@apollo/datasource-rest';
-import { OrderStatus, RoutePriceResponse, VasteOrderResponse } from '../types/vaste-types';
+import { OrderStatus, RoutePriceResponse, VasteOrderResponse } from './vaste-types';
 import type {KeyValueCache} from '@apollo/utils.keyvaluecache';
 import 'dotenv/config';
 
@@ -10,18 +9,27 @@ export class VasteAPI extends RESTDataSource{
     private _cache: KeyValueCache
     constructor(options:{apikey?:string; cache: KeyValueCache}){
         super(options);
-        this.post('authenticate',{body:`username=${encodeURIComponent(process.env.VASTE_USER)}&password=${encodeURIComponent(process.env.VASTE_PASS)}&environment=${encodeURIComponent(process.env.VASTE_ENV)}`,headers:{"Content-Type":"x-www-form-urlencoded"}}).then(res =>{
-            this._apikey = res.data.api_key;
-            options.apikey = res.data.api_key;
-            this._cache = options.cache;
-        })
+        try{
+                this.post('authenticate',{body:`username=${encodeURIComponent(process.env.VASTE_USER!)}&password=${encodeURIComponent(process.env.VASTE_PASS!)}&environment=${encodeURIComponent(process.env.VASTE_ENV!)}`,headers:{"Content-Type":"x-www-form-urlencoded"}}).then(res =>{
+                this._apikey = res.data.api_key;
+                options.apikey = res.data.api_key;
+                this._cache = options.cache;
+            })
+        } catch (e){
+            console.error(e)
+        }
     }
     async getApiKey():Promise<string>{
-      const res = await this.post('authenticate',{body:`username=${encodeURIComponent(process.env.VASTE_USER)}&password=${encodeURIComponent(process.env.VASTE_PASS)}&environment=${encodeURIComponent(process.env.VASTE_ENV)}`,headers:{"Content-Type":"x-www-form-urlencoded"}})
-      return res.data.api_key
+        try{
+            const res = await this.post('authenticate',{body:`username=${encodeURIComponent(process.env.VASTE_USER!)}&password=${encodeURIComponent(process.env.VASTE_PASS!)}&environment=${encodeURIComponent(process.env.VASTE_ENV!)}`,headers:{"Content-Type":"x-www-form-urlencoded"}})
+            return res.data.api_key
+        }
+        catch (e){
+            return ""
+        }
     }
     async getRate(pickup: string, destination: string, date: string): Promise<RoutePriceResponse>{
-        return this.post<RoutePriceResponse>('getRoutePrices',{body:`apikey=${encodeURIComponent(this._apikey)}&environment=${encodeURIComponent(process.env.VASTE_ENV)}&pickup=${encodeURIComponent(pickup)}&delivery=${encodeURIComponent(destination)}&date=${encodeURIComponent(date)}&stretch=1&filter=0&type=4`,
+        return this.post<RoutePriceResponse>('getRoutePrices',{body:`apikey=${encodeURIComponent(this._apikey)}&environment=${encodeURIComponent(process.env.VASTE_ENV!)}&pickup=${encodeURIComponent(pickup)}&delivery=${encodeURIComponent(destination)}&date=${encodeURIComponent(date)}&stretch=1&filter=0&type=4`,
         headers:{"Content-Type":"x-www-form-urlencoded"}});
         
     }
@@ -96,7 +104,7 @@ export class VasteAPI extends RESTDataSource{
         `&deliveryCount=${encodeURIComponent(deliveryCount)}`+
         `&apikey=${encodeURIComponent(apikey)}`+
         `&api_key=${encodeURIComponent(apikey)}`+
-        `&environment=${encodeURIComponent(process.env.VASTE_ENV)}`;
+        `&environment=${encodeURIComponent(process.env.VASTE_ENV!)}`;
     try {
         const response = await this.post('tilaus', {
             body: requestBody,

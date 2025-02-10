@@ -1,0 +1,20 @@
+{{> header title="Vahvista uusi sähköpostiosoitteesi" }}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text color="#525252">
+            Saimme pyynnön vaihtaa rekisteröity sähköpostiosoitteesi tähän.
+            Klikkaa alla olevaa painiketta vahvistaaksesi tämän osoitteen ja viedäksesi prosessin loppuun:
+        </mj-text>
+
+        <mj-button font-family="Helvetica"
+                   background-color="#f45e43"
+                   color="white"
+                   href="{{ changeEmailAddressUrl }}?token={{ identifierChangeToken }}">
+            Vahvista minut!
+        </mj-button>
+    </mj-column>
+</mj-section>
+
+
+{{> footer }}

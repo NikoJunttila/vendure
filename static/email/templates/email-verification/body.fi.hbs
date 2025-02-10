@@ -1,0 +1,20 @@
+{{> header title="Vahvista sähköpostiosoitteesi" }}
+
+<mj-section background-color="#fafafa">
+    <mj-column>
+        <mj-text color="#525252">
+            Kiitos tilin luomisesta. Vahvista tämä sähköpostiosoite klikkaamalla alla olevaa painiketta.
+            rekisteröintiprosessin loppuun saattamiseksi:
+        </mj-text>
+
+        <mj-button font-family="Helvetica"
+                   background-color="#f45e43"
+                   color="white"
+                   href="{{ verifyEmailAddressUrl }}?token={{ verificationToken }}">
+                Vahvista minut!
+        </mj-button>
+    </mj-column>
+</mj-section>
+
+
+{{> footer }}

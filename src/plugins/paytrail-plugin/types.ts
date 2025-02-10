@@ -1,3 +1,14 @@
+import '@vendure/core/dist/entity/custom-entity-fields';
+
+declare module '@vendure/core/dist/entity/custom-entity-fields' {
+    interface CustomOrderFields {
+       PaytrailId?: string;
+    }
+    interface CustomSellerFields {
+       PaytrailMerchantId?: string;
+    }
+}
+
 export interface PaytrailItem {
   unitPrice: number;
   units: number;

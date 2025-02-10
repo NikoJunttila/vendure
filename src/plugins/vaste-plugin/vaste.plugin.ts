@@ -3,6 +3,7 @@ import { LanguageCode, PluginCommonModule, Type, VendurePlugin } from '@vendure/
 import { VasteShippingCalculator } from './vaste-shipping-calculator';
 import { vasteFulfillmentHandler } from './vaste-fulfillment-handler';
 import { PostalCodeChecker } from './shipping-eligibility-checker';
+import "./types"
 
 /**
  * @description
