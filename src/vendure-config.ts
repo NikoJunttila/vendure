@@ -30,7 +30,7 @@ const serverPort = +process.env.PORT || 3000;
 const URL = !IS_DEV ? process.env.PROD_URL : "http://localhost:5173";
 
 export const config: VendureConfig = {
-  logger: new DefaultLogger({ level: LogLevel.Debug, timestamp: false }),
+  //logger: new DefaultLogger({ level: LogLevel.Debug, timestamp: false }),
   apiOptions: {
     port: serverPort,
     adminApiPath: "admin-api",
@@ -91,7 +91,7 @@ export const config: VendureConfig = {
   customFields: {},
   plugins: [
     MultivendorPlugin.init({
-        platformFeePercent: 0,
+        platformFeePercent: 5,
         platformFeeSKU: "FEE"
     }),
     PaytrailPaymentsPlugin.init(),

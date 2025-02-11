@@ -60,7 +60,7 @@ export const generateMultiOrderLines = async (
                 merchant: merchantId,
                 commission: {
                     merchant: merchantId,
-                    amount: Math.ceil(line.unitPriceWithTax / 100)
+                    amount: 0
                 }
             };
         })

@@ -136,7 +136,6 @@ createFulfillment: async (ctx, orders, lines, args ) => {
             trackingCode: transaction.vasteOrder
         };
     }catch(e:any){
-        console.log(e);
         throw e;
     } */
     return {

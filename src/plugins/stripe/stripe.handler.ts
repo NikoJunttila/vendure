@@ -5,16 +5,17 @@ import {
     LanguageCode,
     PaymentMethodHandler,
     SettlePaymentResult,
+    EventBus
 } from '@vendure/core';
 import Stripe from 'stripe';
-
 import { getAmountFromStripeMinorUnits } from './stripe-utils';
 import { StripeService } from './stripe.service';
+import { UserOrderEvent } from '../../events/userOrderEvent';
 
 const { StripeError } = Stripe.errors;
 
 let stripeService: StripeService;
-
+let eventBus : EventBus
 /**
  * The handler for Stripe payments.
  */
@@ -49,6 +50,7 @@ export const stripePaymentMethodHandler = new PaymentMethodHandler({
 
     init(injector: Injector) {
         stripeService = injector.get(StripeService);
+        eventBus = injector.get(EventBus)
     },
 
     createPayment(ctx, order, amount, ___, metadata): CreatePaymentResult {
@@ -58,6 +60,8 @@ export const stripePaymentMethodHandler = new PaymentMethodHandler({
             throw Error(`CreatePayment is not allowed for apiType '${ctx.apiType}'`);
         }
         const amountInMinorUnits = getAmountFromStripeMinorUnits(order, metadata.paymentIntentAmountReceived);
+        eventBus.publish(new UserOrderEvent(ctx, order))
+        
         return {
             amount: amountInMinorUnits,
             state: 'Settled' as const,

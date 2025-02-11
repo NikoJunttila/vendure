@@ -18,6 +18,7 @@ import { LanguageCode, RefundOrderInput } from '@vendure/common/lib/generated-ty
 import { loggerCtx } from './constants';
 import { PaytrailClient, CreateRefundRequest, CreateRefundParams, CallbackUrl } from "@paytrail/paytrail-js-sdk";
 import { AdminNotifEvent } from '../../events/admin-notifEvent';
+import { UserOrderEvent } from '../../events/userOrderEvent';
 
 enum OrderState {
     Authorized = "Authorized",
@@ -69,15 +70,15 @@ export const paytrailPaymentMethodHandler = new PaymentMethodHandler({
             const res = await orderService.updateCustomFields(ctx, order.id, {
                 PaytrailId: transactionId
             })
-            console.log(res)
         } catch (err) {
             console.error(err)
         }
         if (hmacCode) {
-            eventBus.publish(new AdminNotifEvent(ctx, order))
+            //customer email here
+            eventBus.publish(new UserOrderEvent(ctx, order))
             return {
                 amount: order.totalWithTax,
-                state: OrderState.Authorized,
+                state: OrderState.Settled,
                 metadata: {},
             }
         }
@@ -119,7 +120,6 @@ settlePayment: (ctx, order, payment, args): SettlePaymentResult => {
             callbackUrls: callBacks
         }
         const res = await client.createRefund(params, request)
-        console.log(res)
         if (res.status == 200) {
             return {
                 state: "Settled",

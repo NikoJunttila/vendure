@@ -24,12 +24,12 @@ export const multivendorPaymentMethodHandler = new PaymentMethodHandler({
         if (order.type === OrderType.Seller) {
             try {
                 // Create a Transfer payment to the Seller's account
+                //TODO check for paymentMethod
                 const result = await sdk.createTransfer({
                     amount,
                     currency: order.currencyCode,
                     connectedAccountId: metadata.connectedAccountId,
-                    transfer_group: metadata.transfer_group,
-                });
+                    transfer_group: metadata.transfer_group},metadata);
                 return {
                     amount,
                     state: 'Settled' as const,
@@ -54,6 +54,7 @@ export const multivendorPaymentMethodHandler = new PaymentMethodHandler({
                 const result = await sdk.createPayment({
                     amount,
                     currency: order.currencyCode,
+                    connectedAccountId: metadata.connectedAccountId,
                     transfer_group: order.code,
                 });
                 return {

@@ -21,7 +21,6 @@ init: ()=>{
 },
 createFulfillment: async (ctx, orders, lines, args ) => {
     var order = orders.find(ord => ord.state == 'PaymentSettled');
-    console.log(order);
     
         return {
             method: `pick up from store`,

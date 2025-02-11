@@ -39,7 +39,6 @@ if (require.main === module) {
             ),
         )
         .then(async app => {
-            console.log('populating customers...');
             await populateCustomers(app, 10, message => Logger.error(message));
             await populateReview(populateConfig);
             return app.close();
@@ -47,7 +46,7 @@ if (require.main === module) {
         .then(
             () => process.exit(0),
             err => {
-                console.log(err);
+                console.error(err);
                 process.exit(1);
             },
         );

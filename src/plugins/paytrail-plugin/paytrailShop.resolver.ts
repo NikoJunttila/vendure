@@ -23,14 +23,11 @@ export class PaytrailShopResolver {
         if (!order) {
             throw new Error('No active order found');
         }
-        //console.log("order: ",order)
 
         //const order2 = await this.orderService.getActiveOrderForUser(ctx, userID);
         const orderFull = await this.orderService.findOne(ctx, order.id)
-        //console.log("order full: ",orderFull) 
         if (orderFull){
         const paymentResult = await this.paytrailService.createPayment(ctx, orderFull);
-        //console.log("payment result: ",paymentResult)
         if (paymentResult.metadata.paytrail.data.href) {
             return {
                 href: paymentResult.metadata.paytrail.data.href,
@@ -57,14 +54,11 @@ export class PaytrailShopResolver {
             console.error("no active order")
             throw new Error('No active order found');
         }
-        //console.log("order: ",order)
 
         //const order2 = await this.orderService.getActiveOrderForUser(ctx, userID);
         const orderFull = await this.orderService.findOne(ctx, order.id)
-        //console.log("order full: ",orderFull) 
         if (orderFull){
         const paymentResult = await this.paytrailService.createMultiPayment(ctx, orderFull);
-        //console.log("payment result: ",paymentResult)
         if (paymentResult.metadata.paytrail.data.href) {
             return {
                 href: paymentResult.metadata.paytrail.data.href,

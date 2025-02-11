@@ -116,7 +116,6 @@ export async function vendureDataToVaste(order:any, seller:any): Promise<string>
                     vasteOrder.deliveryCount,
                     vasteOrder.destination
                 );
-                console.log(vasteRes)
                 return vasteRes.vasteOrder
             } catch (e) {
                 console.error(e)

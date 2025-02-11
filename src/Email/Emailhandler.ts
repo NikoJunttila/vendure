@@ -4,15 +4,8 @@ import { emailVerificationHandler,
 import { LanguageCode } from "@vendure/core";
 import { customOrderConfirmationHandler } from './CustomOrderConfirm';
 import { customKauppiasOrderConfirmationHandler } from './CustomEmailToKauppias';
-import { customAdminOrderConfirmationHandler } from './CustomAdminConfirmation';
+
 const myCustomOrderToKauppias = customKauppiasOrderConfirmationHandler
-.addTemplate({
-  channelCode: 'default',
-  languageCode: LanguageCode.fi,
-  templateFile: 'body.fi.hbs',
-  subject: 'Uusi tilaus #{{ order.code }}',
-})
-const myCustomOrderToAdmin = customAdminOrderConfirmationHandler
 .addTemplate({
   channelCode: 'default',
   languageCode: LanguageCode.fi,
@@ -44,5 +37,5 @@ const myEmailAddressChangeHandler = emailAddressChangeHandler.addTemplate({
     templateFile: 'body.fi.hbs',
     subject: 'Vahvista uusi sähköpostiosoitteesi',
   })
-export const EmailHandlers = [myCustomOrderConfirmationHandler,myCustomOrderToKauppias,myEmailverificationHandler,myPasswordResetHandler,myEmailAddressChangeHandler,myCustomOrderToAdmin]
+export const EmailHandlers = [myCustomOrderConfirmationHandler,myCustomOrderToKauppias,myEmailverificationHandler,myPasswordResetHandler,myEmailAddressChangeHandler]
 

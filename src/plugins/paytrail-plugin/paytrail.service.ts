@@ -109,12 +109,8 @@ export class PaytrailService {
       const defaultMerchant: string | undefined = process.env.MERCHANT;
       if (!defaultMerchant) console.error("no merchant set");
       /*         for (const line of order.lines){
-            console.log(line)
             if(line.sellerChannelId){
                 const seller = await this.sellerService.findOne(ctx,line.sellerChannelId)
-                console.log(seller)
-                //@ts-ignore
-                console.log(seller?.customFields.PaytrailMerchantId)
             }
         } */
       const newUUID = uuidv4();
@@ -174,7 +170,7 @@ export class PaytrailService {
       };
     } catch (error: any) {
       Logger.error(JSON.stringify(error, null, 3), loggerCtx);
-      console.log(error);
+      console.error(error);
       return {
         amount: order.totalWithTax,
         state: "Declined",

@@ -60,12 +60,12 @@ export class StripeController {
         }
 
         const { metadata } = paymentIntent;
-
         if (!isExpectedVendureStripeEventMetadata(metadata)) {
             if (this.options.skipPaymentIntentsWithoutExpectedMetadata) {
                 response.status(HttpStatus.OK).send(ignorePaymentIntentEvent);
                 return;
             }
+            console.error("erroring meta:", paymentIntent)
             throw new Error(
                 `Missing expected payment intent metadata, unable to settle payment ${paymentIntent.id}!`,
             );

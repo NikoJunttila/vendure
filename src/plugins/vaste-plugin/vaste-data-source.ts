@@ -112,7 +112,6 @@ export class VasteAPI extends RESTDataSource{
                 "Content-Type": "application/x-www-form-urlencoded"
             }
         });
-        console.log('Response:', response);
         return response;
     } catch (error) {
         console.error('Error creating order:', error);

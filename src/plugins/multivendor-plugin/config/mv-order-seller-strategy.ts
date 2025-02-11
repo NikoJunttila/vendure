@@ -113,7 +113,6 @@ async afterSellerOrdersCreated(ctx: RequestContext, aggregateOrder: Order, selle
         await this.entityHydrator.hydrate(ctx, sellerChannel, { relations: ['seller'] });
         // Apply the custom fields from the default order
         const vasteCode = await vendureDataToVaste(aggregateOrder,sellerChannel.seller)
-        console.log("code: ", vasteCode)
         sellerOrder.customFields = { ...aggregateOrder.customFields };
 
         sellerOrder.customFields.VasteCode = vasteCode
@@ -123,13 +122,16 @@ async afterSellerOrdersCreated(ctx: RequestContext, aggregateOrder: Order, selle
         
         
         await this.orderService.applyPriceAdjustments(ctx, sellerOrder);
-
         // Add payment method
         const result = await this.orderService.addPaymentToOrder(ctx, sellerOrder.id, {
             method: paymentMethod.code,
             metadata: {
+                channelToken:defaultChannel.token,
                 transfer_group: aggregateOrder.code,
                 connectedAccountId: sellerChannel.seller?.customFields.connectedAccountId,
+                orderId:aggregateOrder.id,
+                orderCode:aggregateOrder.code,
+                paymentMethod:aggregateOrder.payments[0].method
             },
         });
 

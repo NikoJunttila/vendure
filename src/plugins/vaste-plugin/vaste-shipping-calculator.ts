@@ -24,14 +24,12 @@ export const VasteShippingCalculator = new ShippingCalculator({
         //const formattedDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
         //
         //const Vaste = new VasteAPI(options);
-        //console.log('Calling VasteAPI with date:', formattedDate);
         //
         //const response = await Vaste.getRate(
         //  "Talonpojankatu 2, 67100 Kokkola",
         //  "Tehtaankatu 1, 67100 Kokkola",
         //  formattedDate
         //);
-        //console.log('VasteAPI response:', JSON.stringify(response, null, 2));
         
         //price is 0 for this pilot period
         //price: order.shippingWithTax || response.data[0].amount*100,
