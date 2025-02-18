@@ -6,14 +6,16 @@
     "dev:server": "ts-node ./src/index.ts",
     "dev:worker": "ts-node ./src/index-worker.ts",
     "dev": "concurrently npm:dev:*",
-    "build": "tsc",
     "start:server": "node ./dist/index.js",
     "start:worker": "node ./dist/index-worker.js",
     "start": "concurrently npm:start:*",
     "migration:generate": "ts-node migration generate",
     "migration:run": "ts-node migration run",
     "migration:revert": "ts-node migration revert",
-    "populate": "ts-node populate.ts"
+    "populate": "ts-node populate.ts",
+    "build": "tsc && npm run compile-admin-ui",
+    "build:dev": "rimraf dist && rimraf admin-ui && tsc && npm run compile-admin-ui",
+    "compile-admin-ui": "ts-node src/compile-admin-ui.ts"
   },
   "dependencies": {
     "@apollo/datasource-rest": "^6.4.1",
@@ -26,12 +28,17 @@
     "dotenv": "16.4.7",
     "pg": "^8.13.1",
     "stripe": "^17.6.0",
-    "uuid": "^11.0.5"
+    "uuid": "^11.0.5",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
+    "@types/qrcode": "^1.5.5",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@vendure/cli": "3.1.2",
     "@vendure/create": "^3.1.2",
     "@vendure/testing": "^3.1.2",
+    "@vendure/ui-devkit": "^3.1.3",
     "concurrently": "9.1.2",
     "typescript": "5.3.3"
   }
