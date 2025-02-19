@@ -1,16 +1,31 @@
-version: "3.8"
-
 services:
-  vendure-server:
-    build: .
-    command: npm run start:server
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: server  # explicitly build the "server" stage
     ports:
       - "3000:3000"
+    # Optionally, you can remove the command override if the ENTRYPOINT is already set
+    # command: ["npm", "run", "start:server"]
+    depends_on:
+      - worker
+    volumes:
+      - config:/app/config
     env_file:
       - .env
 
-  vendure-worker:
-    build: .
-    command: npm run start:worker
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: worker  # explicitly build the "worker" stage
+    # Again, remove the command if you want to use the Dockerfile ENTRYPOINT:
+    # command: ["npm", "run", "start:worker"]
+    volumes:
+      - config:/app/config
     env_file:
       - .env
+
+volumes:
+  config:

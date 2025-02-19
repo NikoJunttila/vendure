@@ -1,24 +1,28 @@
-# Dockerfile
-FROM node:20-alpine
+FROM node:20 AS builder
+WORKDIR /usr/src/app
 
-# Install dependencies required for building native modules
-RUN apk add --no-cache libc6-compat python3 make g++
+COPY ["package.json", "package-lock.json", "./"]
+RUN npm ci
 
-# Create app directory and set permissions
-WORKDIR /home/node/app
-RUN mkdir -p node_modules
+COPY ["./tsconfig.json", "./"]
+COPY "./static/email/templates/" "./static/email/templates/"
+COPY "./src/" "./src/"
+# Could do other dev related stuff between the pruning
+RUN npm run build && npm prune --omit=dev
+COPY "./admin-ui/" "./src/"
+# used alpine image before but that breaks the entire app due to musl vs. glibc
+FROM node:20-slim AS prod
+WORKDIR /usr/src/app
+# We want curl & wget for health-checking
+RUN apt update && apt install -y curl wget
+COPY --from=builder ["/usr/src/app/static/", "./dist/static/"]
+COPY --from=builder ["/usr/src/app/dist/", "./dist/"]
+COPY --from=builder ["/usr/src/app/node_modules/", "./node_modules/"]
 
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install
-
-# Copy application source code and compile
-COPY . .
-RUN npm run build
-
-# Expose the port for the Vendure server
+FROM prod AS server
 EXPOSE 3000
-ENV PORT=3000
+ENTRYPOINT ["node", "dist/src/index.js"]
 
-# Default command (can be overridden)
-CMD ["npm", "run", "start:server"]
+FROM prod AS worker
+EXPOSE 3020
+ENTRYPOINT ["node", "dist/src/index-worker.js"]
