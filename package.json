@@ -13,8 +13,8 @@
     "migration:run": "ts-node migration run",
     "migration:revert": "ts-node migration revert",
     "populate": "ts-node populate.ts",
-    "build": "tsc && npm run compile-admin-ui",
-    "build:dev": "rimraf dist && rimraf admin-ui && tsc && npm run compile-admin-ui",
+    "build": "tsc",
+    "build:admin-ui": "rimraf dist && rimraf admin-ui && tsc && npm run compile-admin-ui",
     "compile-admin-ui": "ts-node src/compile-admin-ui.ts"
   },
   "dependencies": {

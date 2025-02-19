@@ -12,6 +12,7 @@ services:
       - worker
     volumes:
       - config:/app/config
+      - /srv/vendure/admin-ui:/usr/src/app/dist/admin-ui
     env_file:
       - .env
 

@@ -9,7 +9,6 @@ COPY "./static/email/templates/" "./static/email/templates/"
 COPY "./src/" "./src/"
 # Could do other dev related stuff between the pruning
 RUN npm run build && npm prune --omit=dev
-COPY "./admin-ui/" "./src/"
 # used alpine image before but that breaks the entire app due to musl vs. glibc
 FROM node:20-slim AS prod
 WORKDIR /usr/src/app
