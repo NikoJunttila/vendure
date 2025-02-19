@@ -22,7 +22,6 @@ import { manualFulfillmentHandler } from "@vendure/core";
 import { PickupFromStorePayment } from "./shipping/shipping-methods/pickupPayment";
 import { VastePlugin } from "./plugins/vaste-plugin/vaste.plugin";
 import { MultivendorPlugin } from "./plugins/multivendor-plugin/multivendor.plugin";
-import { compileUiExtensions } from '@vendure/ui-devkit/compiler';
 import { LandingPagePlugin } from "./plugins/landing-page-plugin.ts/landing-page-plugin";
 import { FeedbackPlugin } from "./plugins/feedback-plugin/feedback.plugin";
 import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugin";
@@ -135,26 +134,10 @@ export const config: VendureConfig = {
         changeEmailAddressUrl: URL + "/verify-email-address-change",
       },
     }),
-        AdminUiPlugin.init({
+    AdminUiPlugin.init({
             route: 'admin',
             port: 3002,
-            app: customAdminUi({recompile: !IS_DEV, devMode: !IS_DEV}),
-            /* app:{
-                path:path.join(__dirname, "../admin-ui/dist")
-            },  
-            app: compileUiExtensions({
-              outputPath: path.join(__dirname, '../admin-ui'),
-              extensions: [
-                PdfPrinterPlugin.ui,
-                FeedbackPlugin.ui,
-                {
-                  translations: {
-                    fi: path.join(__dirname, 'translations/fi.json'),
-                  },
-                }],
-                //devMode:true
-              }),
-            */
+            app: customAdminUi({recompile: IS_DEV, devMode: IS_DEV}),
             adminUiConfig: {
                 defaultLanguage: LanguageCode.fi,
                 availableLanguages: [LanguageCode.fi, LanguageCode.en],

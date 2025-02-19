@@ -3,16 +3,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: server  # explicitly build the "server" stage
+      target: server  # Build the server image
     ports:
       - "3000:3000"
-    # Optionally, you can remove the command override if the ENTRYPOINT is already set
-    # command: ["npm", "run", "start:server"]
     depends_on:
       - worker
     volumes:
       - config:/app/config
-      - /srv/vendure/admin-ui:/usr/src/app/dist/admin-ui
+      - /srv/vendure/admin-ui:/usr/src/app/admin-ui  # Mount pre-built admin-ui here
     env_file:
       - .env
 
@@ -20,9 +18,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: worker  # explicitly build the "worker" stage
-    # Again, remove the command if you want to use the Dockerfile ENTRYPOINT:
-    # command: ["npm", "run", "start:worker"]
+      target: worker  # Build the worker image
     volumes:
       - config:/app/config
     env_file:
