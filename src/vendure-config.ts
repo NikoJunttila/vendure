@@ -6,7 +6,9 @@ import {
   LogLevel,
   DefaultLogger,
   defaultShippingCalculator,
-  LanguageCode
+  LanguageCode,
+  Middleware,
+  MiddlewareHandler
 } from "@vendure/core";
 import {
   EmailPlugin,
@@ -26,6 +28,8 @@ import { LandingPagePlugin } from "./plugins/landing-page-plugin.ts/landing-page
 import { FeedbackPlugin } from "./plugins/feedback-plugin/feedback.plugin";
 import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugin";
 import { customAdminUi } from "./compile-admin-ui";
+import { Request, Response, NextFunction } from 'express';
+
 
 import "dotenv/config";
 import path from "path";
@@ -34,12 +38,29 @@ const IS_DEV = process.env.APP_ENV === "dev";
 const serverPort = +process.env.PORT || 3000;
 const URL = !IS_DEV ? process.env.PROD_URL : "http://localhost:5173";
 
+const proxyMiddlewareHandler: MiddlewareHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  req.app.set('trust proxy', true);
+  next();
+};
+
+
+// Proxy middleware configuration
+const proxyMiddleware: Middleware = {
+  handler: proxyMiddlewareHandler,
+  route: '/',
+  beforeListen: true,
+};
 export const config: VendureConfig = {
   //logger: new DefaultLogger({ level: LogLevel.Debug, timestamp: false }),
   apiOptions: {
     port: serverPort,
     adminApiPath: "admin-api",
     shopApiPath: "shop-api",
+    middleware: [proxyMiddleware],
     // The following options are useful in development mode,
     // but are best turned off for production for security
     // reasons.
