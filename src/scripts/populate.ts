@@ -40,7 +40,7 @@ if (require.main === module) {
         )
         .then(async app => {
             await populateCustomers(app, 10, message => Logger.error(message));
-            await populateReview(populateConfig);
+            //await populateReview(populateConfig);
             return app.close();
         })
         .then(
@@ -56,7 +56,7 @@ function resolveFromCreatePackage(target: string): string {
     return path.join(path.dirname(require.resolve('@vendure/create')), target);
 }
 
-async function populateReview(config: RuntimeVendureConfig) {
+/* async function populateReview(config: RuntimeVendureConfig) {
     const { port, shopApiPath } = config.apiOptions;
     const client = new SimpleGraphQLClient(config, `http://localhost:${port}/${shopApiPath}`);
 
@@ -76,4 +76,4 @@ async function populateReview(config: RuntimeVendureConfig) {
             }
         }
     `);
-}
+} */
