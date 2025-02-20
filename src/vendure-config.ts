@@ -29,6 +29,13 @@ import { FeedbackPlugin } from "./plugins/feedback-plugin/feedback.plugin";
 import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugin";
 import { customAdminUi } from "./compile-admin-ui";
 import { Request, Response, NextFunction } from 'express';
+import rateLimit from 'express-rate-limit';
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  validate: { trustProxy: false },
+});
 
 
 import "dotenv/config";
@@ -43,7 +50,8 @@ const proxyMiddlewareHandler: MiddlewareHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  req.app.set('trust proxy', true);
+  req.app.use(limiter)
+  //req.app.set('trust proxy', true);
   next();
 };
 
