@@ -27,6 +27,7 @@ import { MultivendorPlugin } from "./plugins/multivendor-plugin/multivendor.plug
 import { LandingPagePlugin } from "./plugins/landing-page-plugin.ts/landing-page-plugin";
 import { FeedbackPlugin } from "./plugins/feedback-plugin/feedback.plugin";
 import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugin";
+import { ElasticsearchPlugin } from "@vendure/elasticsearch-plugin";
 import { customAdminUi } from "./compile-admin-ui";
 import { Request, Response, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
@@ -122,7 +123,34 @@ export const config: VendureConfig = {
   },
   // When adding or altering custom field definitions, the database will
   // need to be updated. See the "Migrations" section in README.md.
-  customFields: {},
+  customFields: {
+    Product:[{
+      name:"customizationOptions",
+      type:"struct",
+      label:[{languageCode: LanguageCode.en, value:"customizationOptions"},{languageCode:LanguageCode.fi,value:"Kustomointi vaihtoehdot"}],
+      fields:[
+        {
+          name:"enabled",
+          type:"boolean",
+          description:[{languageCode: LanguageCode.en, value:"Activate this field"},{languageCode:LanguageCode.fi,value:"Aktivoi kustomointi"}],
+        },
+        {
+          name:"limit",
+          type:"int",
+          min:1,
+          description:[{languageCode: LanguageCode.en, value:"Limit number of options user can choose"},{languageCode:LanguageCode.fi,value:"Rajoita käyttäjän valinta määrää"}],
+        },
+        {
+          name:"filling",
+          type:"text",
+          description:[{languageCode:LanguageCode.en, value:"Enter extra fillings user can choose with , seperating each option"},{languageCode: LanguageCode.fi,value:"Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita, erottamalla kukin vaihtoehto toisistaan , merkillä."}],
+        }
+      ]
+    }],
+    OrderLine:[
+      {name:"fillings",type:"string"}
+    ],
+  },
   plugins: [
     LandingPagePlugin,
     //PdfPrinterPlugin.init({}),
@@ -145,7 +173,11 @@ export const config: VendureConfig = {
       assetUrlPrefix: IS_DEV ? undefined : URL + "/assets/",
     }),
     DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
-    DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
+    //DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
+    ElasticsearchPlugin.init({
+      host:"http://localhost",
+      port:9200
+    }),
     EmailPlugin.init({
       devMode: true,
       outputPath: path.join(__dirname, "../static/email/test-emails"),

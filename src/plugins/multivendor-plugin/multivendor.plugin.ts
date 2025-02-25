@@ -128,7 +128,7 @@ import { MultivendorPluginOptions } from './types';
     configuration: config => {
         config.customFields.Seller.push({
             name: 'connectedAccountId',
-            label: [{ languageCode: LanguageCode.en, value: 'Connected account ID' }],
+            label: [{ languageCode: LanguageCode.en, value: 'Connected account ID' },{ languageCode: LanguageCode.fi, value: 'Yhdistetty käyttäjä ID' }],
             description: [
                 { languageCode: LanguageCode.en, value: 'The ID used to process connected payments' },
             ],
