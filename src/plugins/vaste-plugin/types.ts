@@ -20,4 +20,15 @@ declare module '@vendure/core/dist/entity/custom-entity-fields' {
     interface CustomFulfillmentFields {
         vasteOrderId?: string;
     }
+    interface CustomProductFields {
+        customizationOptions?: {
+            enabled?: boolean;
+            limit?: number;
+            filling?: string;
+        };
+    }
+
+    interface CustomOrderLineFields {
+        fillings?: string;
+    }
 }

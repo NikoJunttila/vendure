@@ -173,11 +173,11 @@ export const config: VendureConfig = {
       assetUrlPrefix: IS_DEV ? undefined : URL + "/assets/",
     }),
     DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
-    //DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
-    ElasticsearchPlugin.init({
+    DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
+/*     ElasticsearchPlugin.init({
       host:"http://localhost",
       port:9200
-    }),
+    }), */
     EmailPlugin.init({
       devMode: true,
       outputPath: path.join(__dirname, "../static/email/test-emails"),

@@ -106,6 +106,7 @@
                     <td>{{ quantity }} x {{ productVariant.name }}</td>
                     <td>{{ productVariant.quantity }}</td>
                     <td>€{{ formatMoney discountedLinePriceWithTax }}</td>
+                    <td>{{ customFields.fillings }}</td>
                 </tr>
             {{/each}}
             {{#each order.discounts }}
