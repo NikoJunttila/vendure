@@ -34,12 +34,11 @@ RUN mkdir -p /usr/src/app/static/email/templates/partials
 
 # Stage 3: Server Container
 FROM prod AS server
-EXPOSE 3000
 # Vendure will serve the admin‑ui from /usr/src/app/admin-ui
 # This folder will be provided by a host volume mount
 ENTRYPOINT ["node", "dist/index.js"]
 
 # Stage 4: Worker Container
 FROM prod AS worker
-EXPOSE 3020
+
 ENTRYPOINT ["node", "dist/index-worker.js"]
