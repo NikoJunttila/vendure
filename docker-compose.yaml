@@ -13,6 +13,8 @@ services:
       - /srv/vendure/admin-ui:/usr/src/app/admin-ui  # Mount pre-built admin-ui here
     env_file:
       - .env
+    networks:
+      - coolify
 
   worker:
     build:
@@ -23,6 +25,12 @@ services:
       - config:/app/config
     env_file:
       - .env
+    networks:
+      - coolify
 
 volumes:
   config:
+
+networks:
+  coolify:
+    external: true
