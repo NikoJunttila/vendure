@@ -69,6 +69,12 @@ export const config: VendureConfig = {
     adminApiPath: "admin-api",
     shopApiPath: "shop-api",
     middleware: [proxyMiddleware],
+    cors:{
+      origin: "*",
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: "*", // Allow all headers
+      credentials: true, // Allow cookies (important if you're using cookies for authentication)
+    },
     // The following options are useful in development mode,
     // but are best turned off for production for security
     // reasons.
