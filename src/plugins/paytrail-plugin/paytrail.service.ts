@@ -148,10 +148,10 @@ export class PaytrailService {
       };
       data.items!.push(orderShippingItem);
 
-      Logger.debug(JSON.stringify(data, null, 2), loggerCtx);
+      console.log(JSON.stringify(data, null, 2));
       const paytrailRes = await paytrail.createShopInShopPayment(data);
 
-      Logger.debug(JSON.stringify(paytrailRes, null, 2), loggerCtx);
+      console.log(paytrailRes);
       if (paytrailRes.status === 400) {
         return {
           amount: order.totalWithTax,

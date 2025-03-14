@@ -146,6 +146,7 @@ import "./types"
                 ],
                 nullable: true,
                 public: true,
+                defaultValue:"Normaali"
             }
         );
 
