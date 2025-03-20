@@ -27,7 +27,6 @@ import { MultivendorPlugin } from "./plugins/multivendor-plugin/multivendor.plug
 import { LandingPagePlugin } from "./plugins/landing-page-plugin.ts/landing-page-plugin";
 import { FeedbackPlugin } from "./plugins/feedback-plugin/feedback.plugin";
 import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugin";
-import { ElasticsearchPlugin } from "@vendure/elasticsearch-plugin";
 import { customAdminUi } from "./compile-admin-ui";
 import { Request, Response, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
@@ -174,10 +173,6 @@ export const config: VendureConfig = {
     }),
     DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
     DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
-/*     ElasticsearchPlugin.init({
-      host:"http://localhost",
-      port:9200
-    }), */
     EmailPlugin.init({
       devMode: true,
       outputPath: path.join(__dirname, "../static/email/test-emails"),
