@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@apollo/datasource-rest": "^6.4.1",
-    "@elastic/elasticsearch": "^8.17.1",
     "@paytrail/paytrail-js-sdk": "^1.0.3",
     "@vendure/admin-ui-plugin": "3.1.7",
     "@vendure/asset-server-plugin": "3.1.7",

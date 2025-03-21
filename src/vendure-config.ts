@@ -8,12 +8,9 @@ import {
   defaultShippingCalculator,
   LanguageCode,
   Middleware,
-  MiddlewareHandler
+  MiddlewareHandler,
 } from "@vendure/core";
-import {
-  EmailPlugin,
-  FileBasedTemplateLoader,
-} from "@vendure/email-plugin";
+import { EmailPlugin, FileBasedTemplateLoader } from "@vendure/email-plugin";
 import { EmailHandlers } from "./Email/Emailhandler";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
@@ -28,15 +25,15 @@ import { LandingPagePlugin } from "./plugins/landing-page-plugin.ts/landing-page
 import { FeedbackPlugin } from "./plugins/feedback-plugin/feedback.plugin";
 import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugin";
 import { customAdminUi } from "./compile-admin-ui";
-import { Request, Response, NextFunction } from 'express';
-import rateLimit from 'express-rate-limit';
+import { ExtraItemPriceStrategy } from "./price-calculation-strategy";
+import { Request, Response, NextFunction } from "express";
+import rateLimit from "express-rate-limit";
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
   validate: { trustProxy: false },
 });
-
 
 import "dotenv/config";
 import path from "path";
@@ -50,16 +47,15 @@ const proxyMiddlewareHandler: MiddlewareHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  req.app.use(limiter)
+  req.app.use(limiter);
   //req.app.set('trust proxy', true);
   next();
 };
 
-
 // Proxy middleware configuration
 const proxyMiddleware: Middleware = {
   handler: proxyMiddlewareHandler,
-  route: '/',
+  route: "/",
   beforeListen: true,
 };
 export const config: VendureConfig = {
@@ -95,8 +91,8 @@ export const config: VendureConfig = {
       secret: process.env.COOKIE_SECRET,
       name: {
         shop: "session",
-        admin: "admin-session"
-      }
+        admin: "admin-session",
+      },
     },
   },
   dbConnectionOptions: {
@@ -120,34 +116,172 @@ export const config: VendureConfig = {
     shippingEligibilityCheckers: [PickupStore],
     fulfillmentHandlers: [manualFulfillmentHandler],
   },
+  orderOptions: {
+    orderItemPriceCalculationStrategy: new ExtraItemPriceStrategy(),
+  },
   // When adding or altering custom field definitions, the database will
   // need to be updated. See the "Migrations" section in README.md.
   customFields: {
-    Product:[{
-      name:"customizationOptions",
-      type:"struct",
-      label:[{languageCode: LanguageCode.en, value:"customizationOptions"},{languageCode:LanguageCode.fi,value:"Kustomointi vaihtoehdot"}],
-      fields:[
-        {
-          name:"enabled",
-          type:"boolean",
-          description:[{languageCode: LanguageCode.en, value:"Activate this field"},{languageCode:LanguageCode.fi,value:"Aktivoi kustomointi"}],
-        },
-        {
-          name:"limit",
-          type:"int",
-          min:1,
-          description:[{languageCode: LanguageCode.en, value:"Limit number of options user can choose"},{languageCode:LanguageCode.fi,value:"Rajoita käyttäjän valinta määrää"}],
-        },
-        {
-          name:"filling",
-          type:"text",
-          description:[{languageCode:LanguageCode.en, value:"Enter extra fillings user can choose with , seperating each option"},{languageCode: LanguageCode.fi,value:"Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita, erottamalla kukin vaihtoehto toisistaan , merkillä."}],
-        }
-      ]
-    }],
-    OrderLine:[
-      {name:"fillings",type:"string"}
+    Product: [
+      // Your existing custom fields
+      {
+        name: "incredientlist",
+        type: "text",
+        label: [
+          { languageCode: LanguageCode.en, value: "incredient list" },
+          {
+            languageCode: LanguageCode.fi,
+            value:
+              "Ainesosaluettelo erottamalla kukin vaihtoehto toisistaan , merkillä.",
+          },
+        ],
+      },
+      {
+        name: "allergenlist",
+        type: "text",
+        label: [
+          { languageCode: LanguageCode.en, value: "allergen list" },
+          {
+            languageCode: LanguageCode.fi,
+            value:
+              "Luettele mahdolliset allergeenit asiakkaalle (esim. gluteeni), erottamalla kukin vaihtoehto toisistaan , merkillä.",
+          },
+        ],
+      },
+      // Modified customizationOptions
+      {
+        name: "customizationOptions",
+        type: "struct",
+        label: [
+          { languageCode: LanguageCode.en, value: "customizationOptions" },
+          { languageCode: LanguageCode.fi, value: "Kustomointi vaihtoehdot" },
+        ],
+        fields: [
+          {
+            name: "enabled",
+            type: "boolean",
+            description: [
+              { languageCode: LanguageCode.en, value: "Activate this field" },
+              { languageCode: LanguageCode.fi, value: "Aktivoi kustomointi" },
+            ],
+          },
+          {
+            name: "limit",
+            type: "int",
+            description: [
+              {
+                languageCode: LanguageCode.en,
+                value: "Limit number of options user can choose",
+              },
+              {
+                languageCode: LanguageCode.fi,
+                value: "Rajoita käyttäjän valinta määrää",
+              },
+            ],
+          },
+          {
+            name: "filling",
+            type: "text",
+            description: [
+              {
+                languageCode: LanguageCode.en,
+                value:
+                  "Enter extra fillings user can choose with , seperating each option",
+              },
+              {
+                languageCode: LanguageCode.fi,
+                value:
+                  "Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita, erottamalla kukin vaihtoehto toisistaan , merkillä.",
+              },
+            ],
+          },
+          
+        ],
+      },
+      {
+        name: "extraoptions",
+        type: "struct",
+        label: [
+          { languageCode: LanguageCode.en, value: "Extra choices" },
+          { languageCode: LanguageCode.fi, value: "Extra maksulliset vaihtoehdot" },
+        ],
+        fields: [
+          {
+            name: "enabled",
+            type: "boolean",
+            description: [
+              { languageCode: LanguageCode.en, value: "Activate this field" },
+              { languageCode: LanguageCode.fi, value: "Aktivoi kustomointi" },
+            ],
+          },
+          {
+            name: "price",
+            type: "int",
+            description: [
+              { languageCode: LanguageCode.en, value: "Extra price per item in cents" },
+              { languageCode: LanguageCode.fi, value: "Extra hinta per tuote senteissä" },
+            ],
+          },
+          {
+            name: "extrachoices",
+            type: "text",
+            ui: { component: "json-editor" },
+            description: [
+              {
+                languageCode: LanguageCode.en,
+                value: "Additional toppings with prices (JSON format)",
+              },
+              {
+                languageCode: LanguageCode.fi,
+                value: "Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita maksua vastaan, erottamalla kukin vaihtoehto toisistaan , merkillä.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    OrderLine: [
+      { name: "fillings", type: "string" },
+      {
+        name: "extraoptions",
+        type: "struct",
+        label: [
+          { languageCode: LanguageCode.en, value: "Extra choices" },
+          { languageCode: LanguageCode.fi, value: "Extra maksulliset vaihtoehdot" },
+        ],
+        fields: [
+          {
+            name: "enabled",
+            type: "boolean",
+            description: [
+              { languageCode: LanguageCode.en, value: "Activate this field" },
+              { languageCode: LanguageCode.fi, value: "Aktivoi kustomointi" },
+            ],
+          },
+          {
+            name: "price",
+            type: "int",
+            description: [
+              { languageCode: LanguageCode.en, value: "Extra price per item in cents" },
+              { languageCode: LanguageCode.fi, value: "Extra hinta per tuote senteissä" },
+            ],
+          },
+          {
+            name: "extrachoices",
+            type: "text",
+            description: [
+              {
+                languageCode: LanguageCode.en,
+                value: "Additional toppings with prices (JSON format)",
+              },
+              {
+                languageCode: LanguageCode.fi,
+                value: "Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita maksua vastaan, erottamalla kukin vaihtoehto toisistaan , merkillä.",
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   plugins: [
@@ -155,8 +289,8 @@ export const config: VendureConfig = {
     //PdfPrinterPlugin.init({}),
     //FeedbackPlugin.init(),
     MultivendorPlugin.init({
-        platformFeePercent: 5,
-        platformFeeSKU: "FEE"
+      platformFeePercent: 5,
+      platformFeeSKU: "FEE",
     }),
     PaytrailPaymentsPlugin.init(),
     VastePlugin.init(),
@@ -191,13 +325,13 @@ export const config: VendureConfig = {
       },
     }),
     AdminUiPlugin.init({
-            route: 'admin',
-            port: 3002,
-            app: customAdminUi({recompile: IS_DEV, devMode: IS_DEV}),
-            adminUiConfig: {
-                defaultLanguage: LanguageCode.fi,
-                availableLanguages: [LanguageCode.fi, LanguageCode.en],
-            },
-        }),
+      route: "admin",
+      port: 3002,
+      app: customAdminUi({ recompile: IS_DEV, devMode: IS_DEV }),
+      adminUiConfig: {
+        defaultLanguage: LanguageCode.fi,
+        availableLanguages: [LanguageCode.fi, LanguageCode.en],
+      },
+    }),
   ],
 };
