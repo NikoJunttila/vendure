@@ -22,22 +22,17 @@ export const customKauppiasOrderConfirmationHandler = new EmailEventListener('or
         const shippingLines = await hydrateShippingLines(event.ctx, event.order, injector);
         const entityHydrator = injector.get(EntityHydrator);
         await entityHydrator.hydrate(event.ctx,event.order,{relations: ['channels.seller']})
-        const email = event.order.channels[0].seller?.customFields.Email
+        let email = event.order.channels[0].seller?.customFields.Email
+        if (event.order.channels.length > 1){
+            email = event.order.channels[1].seller?.customFields.Email
+        }
         const dateString = event.order.customFields?.dateString
         return { shippingLines,
                  dateString: dateString,
                  email
         };
     })
-    // Here we are setting the recipient of the email to be the
-    // customer's email address.
     .setRecipient(event => `${event.data.email}`)
-    // We can interpolate variables from the EmailPlugin's configured
-    // `globalTemplateVars` object.
     .setFrom('{{ fromAddress }}')
-    // We can also interpolate variables made available by the
-    // `setTemplateVars()` method below
     .setSubject('Order confirmation for #{{ order.code }}')
-    // The object returned here defines the variables which are
-    // available to the email template.
     .setTemplateVars(event =>  ({ order: event.order, shippingLines: event.data.shippingLines, dateString: event.data.dateString }))

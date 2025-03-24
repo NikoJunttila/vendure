@@ -79,6 +79,7 @@ export async function vendureDataToVaste(order:any, seller:any): Promise<string>
                 packageDescriptionText: "",
                 personCount: 0
             };
+            // console.log("vaste ",vasteOrder)
             try {
                 
               const vasteRes = await vaste.createOrder(

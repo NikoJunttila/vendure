@@ -1,3 +1,4 @@
+//not in use anywhere
 import { EntityHydrator } from '@vendure/core';
 import { EmailEventListener, transformOrderLineAssetUrls, hydrateShippingLines } from '@vendure/email-plugin';
 import { AdminNotifEvent } from '../events/admin-notifEvent';
@@ -10,6 +11,7 @@ export const customAdminOrderConfirmationHandler = new EmailEventListener('admin
         const entityHydrator = injector.get(EntityHydrator);
         await entityHydrator.hydrate(event.ctx,event.order,{relations: ['channels.seller']})
         const email = event.order.channels[0].seller?.customFields.Email
+        console.log("Admin email ", email)
         const dateString = event.order.customFields?.dateString
         return { shippingLines,
                  dateString: dateString,

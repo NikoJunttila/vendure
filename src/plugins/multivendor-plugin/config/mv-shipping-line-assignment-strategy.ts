@@ -23,7 +23,12 @@ export class MultivendorShippingLineAssignmentStrategy implements ShippingLineAs
         // First we need to ensure the required relations are available
         // to work with.
         const defaultChannel = await this.channelService.getDefaultChannel();
-        await this.entityHydrator.hydrate(ctx, shippingLine, { relations: ['shippingMethod.channels'] });
+        try {
+            const res = await this.entityHydrator.hydrate(ctx, shippingLine, { relations: ['shippingMethod.channels'] });
+            // console.log(res)
+        } catch (e){
+            console.error(e)
+        }
         const { channels } = shippingLine.shippingMethod;
 
         // We assume that, if a ShippingMethod is assigned to exactly 2 Channels,
@@ -34,6 +39,7 @@ export class MultivendorShippingLineAssignmentStrategy implements ShippingLineAs
                 // Once we have established the seller's Channel, we can filter the OrderLines
                 // that belong to that Channel. The `sellerChannelId` was previously established
                 // in the `OrderSellerStrategy.setOrderLineSellerChannel()` method.
+                // console.log("Sellerchannel: ", sellerChannel)
                 return order.lines.filter(line => idsAreEqual(line.sellerChannelId, sellerChannel.id));
             }
         }

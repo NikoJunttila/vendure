@@ -10,9 +10,6 @@ export const customOrderConfirmationHandler = new EmailEventListener('order-conf
         transformOrderLineAssetUrls(event.ctx, event.order, injector);
         const shippingLines = await hydrateShippingLines(event.ctx, event.order, injector);
         const dateString = event.order.customFields?.dateString
-        for (const line of event.order.lines){
-            console.log(line.customFields?.fillings)
-        }
         return { shippingLines, dateString: dateString};
     })
     // Here we are setting the recipient of the email to be the
