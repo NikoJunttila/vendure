@@ -112,16 +112,11 @@
                         {{#if customFields.fillings}}
                             <div>Täytteet: {{ customFields.fillings }}</div>
                         {{/if}}
-                        {{#if customFields.extraoptions}}
-                            {{#if customFields.extraoptions.enabled}}
+                            {{#if customFields.extrachoicestring}}
                                 <div class="extra-options">
-                                    Lisävalinnat: {{ customFields.extraoptions.extrachoices }}
-                                    {{#if customFields.extraoptions.price}}
-                                        (+€{{ formatMoney customFields.extraoptions.price }}) kpl
-                                    {{/if}}
+                                    Lisävalinnat: {{ customFields.extrachoicestring }}
                                 </div>
                             {{/if}}
-                        {{/if}}
                     </td>
                     <td>{{ productVariant.quantity }}</td>
                     <td>€{{ formatMoney discountedLinePriceWithTax }}</td>

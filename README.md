@@ -5,3 +5,4 @@ add "multi" to all shipping methods when doing multi vendor.
 Todo<br>
 Figure out how shipping will be calculated<br>
 What times are shippings <br>
+Email texts <br>

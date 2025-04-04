@@ -123,7 +123,22 @@ export const config: VendureConfig = {
   // need to be updated. See the "Migrations" section in README.md.
   customFields: {
     Product: [
-      // Your existing custom fields
+      /* {
+            name: "extrachoices",
+            type: "text",
+            defaultValue: `{"juusto":100,"kebab":250}`,
+            ui: {component: 'json-editor-form-input'},
+            description: [
+              {
+                languageCode: LanguageCode.en,
+                value: "Additional toppings with prices (JSON format)",
+              },
+              {
+                languageCode: LanguageCode.fi,
+                value: "Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita maksua vastaan, erottamalla kukin vaihtoehto toisistaan , merkillä.",
+              },
+            ],
+          }, */
       {
         name: "incredientlist",
         type: "text",
@@ -195,7 +210,6 @@ export const config: VendureConfig = {
               },
             ],
           },
-          
         ],
       },
       {
@@ -203,7 +217,10 @@ export const config: VendureConfig = {
         type: "struct",
         label: [
           { languageCode: LanguageCode.en, value: "Extra choices" },
-          { languageCode: LanguageCode.fi, value: "Extra maksulliset vaihtoehdot" },
+          {
+            languageCode: LanguageCode.fi,
+            value: "Extra maksulliset vaihtoehdot",
+          },
         ],
         fields: [
           {
@@ -218,14 +235,20 @@ export const config: VendureConfig = {
             name: "price",
             type: "int",
             description: [
-              { languageCode: LanguageCode.en, value: "Extra price per item in cents" },
-              { languageCode: LanguageCode.fi, value: "Extra hinta per tuote senteissä" },
+              {
+                languageCode: LanguageCode.en,
+                value: "Extra price per item in cents",
+              },
+              {
+                languageCode: LanguageCode.fi,
+                value: "Extra hinta per tuote senteissä",
+              },
             ],
           },
           {
             name: "extrachoices",
             type: "text",
-            ui: { component: "json-editor" },
+            ui: { component: "json-editor-form-input" },
             description: [
               {
                 languageCode: LanguageCode.en,
@@ -233,7 +256,8 @@ export const config: VendureConfig = {
               },
               {
                 languageCode: LanguageCode.fi,
-                value: "Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita maksua vastaan, erottamalla kukin vaihtoehto toisistaan , merkillä.",
+                value:
+                  "Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita maksua vastaan, erottamalla kukin vaihtoehto toisistaan , merkillä.",
               },
             ],
           },
@@ -243,11 +267,18 @@ export const config: VendureConfig = {
     OrderLine: [
       { name: "fillings", type: "string" },
       {
+        name: "extrachoicestring",
+        type: "string",
+      },
+      {
         name: "extraoptions",
         type: "struct",
         label: [
           { languageCode: LanguageCode.en, value: "Extra choices" },
-          { languageCode: LanguageCode.fi, value: "Extra maksulliset vaihtoehdot" },
+          {
+            languageCode: LanguageCode.fi,
+            value: "Extra maksulliset vaihtoehdot",
+          },
         ],
         fields: [
           {
@@ -262,8 +293,14 @@ export const config: VendureConfig = {
             name: "price",
             type: "int",
             description: [
-              { languageCode: LanguageCode.en, value: "Extra price per item in cents" },
-              { languageCode: LanguageCode.fi, value: "Extra hinta per tuote senteissä" },
+              {
+                languageCode: LanguageCode.en,
+                value: "Extra price per item in cents",
+              },
+              {
+                languageCode: LanguageCode.fi,
+                value: "Extra hinta per tuote senteissä",
+              },
             ],
           },
           {
@@ -272,11 +309,12 @@ export const config: VendureConfig = {
             description: [
               {
                 languageCode: LanguageCode.en,
-                value: "Additional toppings with prices (JSON format)",
+                value: "Additional toppings with prices",
               },
               {
                 languageCode: LanguageCode.fi,
-                value: "Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita maksua vastaan, erottamalla kukin vaihtoehto toisistaan , merkillä.",
+                value:
+                  "Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita maksua vastaan.",
               },
             ],
           },
