@@ -48,8 +48,12 @@
             Arvoisa {{ order.customer.firstName }} {{ order.customer.lastName }},
         </mj-text>
         <mj-text>
+            Kotiin kuljetus ajalle: {{dateString}}
+        </mj-text>
+        <mj-text>
             Kiitos tilauksesta!
         </mj-text>
+
         <mj-text>
             Tilauksiin liittyvissä kysymyksissä voit ottaa yhteyttä Louen kyläkauppaan: loue@m-ketju.fi, Puh: 044 238 8977
             Ja valitessasi noudon voit hakea tuotteet osoitteesta: Nelostie 2391 Loue, 95340
@@ -134,12 +138,10 @@
                 <td colspan="3">Välisumma:</td>
                 <td>€{{ formatMoney order.subTotalWithTax }}</td>
             </tr>
-            {{#each shippingLines }}
             <tr class="order-row">
-                <td colspan="3">{{ shippingMethod.name }} aika: {{../dateString}}</td>
-                <td>€{{ formatMoney priceWithTax }}</td>
+                <td colspan="3">Kotiinkuljetus</td>
+                <td>€10</td>
             </tr>
-            {{/each}}
             <tr class="order-row total-row">
                 <td colspan="3">Yhteensä:</td>
                 <td>€{{ formatMoney order.totalWithTax }}</td>

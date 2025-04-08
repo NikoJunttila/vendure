@@ -48,6 +48,9 @@
             Dear {{ order.customer.firstName }} {{ order.customer.lastName }},
         </mj-text>
         <mj-text>
+            Homedelivery for time: {{dateString}}
+        </mj-text>
+        <mj-text>
             Thank you for your order!
         </mj-text>
         <mj-text>
@@ -134,12 +137,10 @@
                 <td colspan="3">Subtotal:</td>
                 <td>€{{ formatMoney order.subTotalWithTax }}</td>
             </tr>
-            {{#each shippingLines }}
             <tr class="order-row">
-                <td colspan="3">{{ shippingMethod.name }} time: {{../dateString}}</td>
-                <td>€{{ formatMoney priceWithTax }}</td>
+                <td colspan="3">Homedelivery</td>
+                <td>€10</td>
             </tr>
-            {{/each}}
             <tr class="order-row total-row">
                 <td colspan="3">Total:</td>
                 <td>€{{ formatMoney order.totalWithTax }}</td>

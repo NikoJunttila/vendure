@@ -26,14 +26,7 @@ import { FeedbackPlugin } from "./plugins/feedback-plugin/feedback.plugin";
 import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugin";
 import { customAdminUi } from "./compile-admin-ui";
 import { ExtraItemPriceStrategy } from "./price-calculation-strategy";
-import { Request, Response, NextFunction } from "express";
-import rateLimit from "express-rate-limit";
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
-  validate: { trustProxy: false },
-});
+import { MultiSinglePayment } from "./shipping/shipping-methods/multi-vendor-single";
 
 import "dotenv/config";
 import path from "path";
@@ -42,29 +35,13 @@ const IS_DEV = process.env.APP_ENV === "dev";
 const serverPort = +process.env.PORT || 3000;
 const URL = !IS_DEV ? process.env.PROD_URL : "http://localhost:5173";
 
-const proxyMiddlewareHandler: MiddlewareHandler = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
-  req.app.use(limiter);
-  //req.app.set('trust proxy', true);
-  next();
-};
-
-// Proxy middleware configuration
-const proxyMiddleware: Middleware = {
-  handler: proxyMiddlewareHandler,
-  route: "/",
-  beforeListen: true,
-};
 export const config: VendureConfig = {
   //logger: new DefaultLogger({ level: LogLevel.Debug, timestamp: false }),
   apiOptions: {
     port: serverPort,
     adminApiPath: "admin-api",
     shopApiPath: "shop-api",
-    middleware: [proxyMiddleware],
+    //middleware: [proxyMiddleware],
     // The following options are useful in development mode,
     // but are best turned off for production for security
     // reasons.
@@ -112,33 +89,15 @@ export const config: VendureConfig = {
     paymentMethodHandlers: [dummyPaymentHandler],
   },
   shippingOptions: {
-    shippingCalculators: [PickupFromStorePayment, defaultShippingCalculator],
+    shippingCalculators: [PickupFromStorePayment, defaultShippingCalculator, MultiSinglePayment],
     shippingEligibilityCheckers: [PickupStore],
     fulfillmentHandlers: [manualFulfillmentHandler],
   },
   orderOptions: {
     orderItemPriceCalculationStrategy: new ExtraItemPriceStrategy(),
   },
-  // When adding or altering custom field definitions, the database will
-  // need to be updated. See the "Migrations" section in README.md.
   customFields: {
     Product: [
-      /* {
-            name: "extrachoices",
-            type: "text",
-            defaultValue: `{"juusto":100,"kebab":250}`,
-            ui: {component: 'json-editor-form-input'},
-            description: [
-              {
-                languageCode: LanguageCode.en,
-                value: "Additional toppings with prices (JSON format)",
-              },
-              {
-                languageCode: LanguageCode.fi,
-                value: "Kirjoita ylimääräiset täytteet, jotka käyttäjä voi valita maksua vastaan, erottamalla kukin vaihtoehto toisistaan , merkillä.",
-              },
-            ],
-          }, */
       {
         name: "incredientlist",
         type: "text",

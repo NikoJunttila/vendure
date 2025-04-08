@@ -12,6 +12,7 @@ declare module "@vendure/core/dist/entity/custom-entity-fields" {
     lastName?: string;
   }
   interface CustomOrderFields {
+    vendorAmount? : number
     VasteCode?: string;
     dateString?: string;
     dateTime?: Date;

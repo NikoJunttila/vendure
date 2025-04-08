@@ -17,7 +17,6 @@ import {
 import { LanguageCode, RefundOrderInput } from '@vendure/common/lib/generated-types';
 import { loggerCtx } from './constants';
 import { PaytrailClient, CreateRefundRequest, CreateRefundParams, CallbackUrl } from "@paytrail/paytrail-js-sdk";
-import { AdminNotifEvent } from '../../events/admin-notifEvent';
 import { UserOrderEvent } from '../../events/userOrderEvent';
 
 enum OrderState {
