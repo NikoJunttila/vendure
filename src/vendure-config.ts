@@ -2,6 +2,7 @@ import {
   dummyPaymentHandler,
   DefaultJobQueuePlugin,
   DefaultSearchPlugin,
+  DefaultSchedulerPlugin,
   VendureConfig,
   LogLevel,
   DefaultLogger,
@@ -15,6 +16,8 @@ import { EmailHandlers } from "./Email/Emailhandler";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
 import { StripePlugin } from "./plugins/stripe";
+import { GraphiqlPlugin } from "@vendure/graphiql-plugin";
+
 import { PaytrailPaymentsPlugin } from "./plugins/paytrail-plugin/paytrail-plugin";
 import { PickupStore } from "./shipping/shipping-methods/pickup-plugin";
 import { manualFulfillmentHandler } from "@vendure/core";
@@ -41,7 +44,7 @@ export const config: VendureConfig = {
     port: serverPort,
     adminApiPath: "admin-api",
     shopApiPath: "shop-api",
-    //middleware: [proxyMiddleware],
+    middleware: [],
     // The following options are useful in development mode,
     // but are best turned off for production for security
     // reasons.
@@ -191,20 +194,6 @@ export const config: VendureConfig = {
             ],
           },
           {
-            name: "price",
-            type: "int",
-            description: [
-              {
-                languageCode: LanguageCode.en,
-                value: "Extra price per item in cents",
-              },
-              {
-                languageCode: LanguageCode.fi,
-                value: "Extra hinta per tuote senteissä",
-              },
-            ],
-          },
-          {
             name: "extrachoices",
             type: "text",
             ui: { component: "json-editor-form-input" },
@@ -282,9 +271,11 @@ export const config: VendureConfig = {
     ],
   },
   plugins: [
-    LandingPagePlugin,
-    //PdfPrinterPlugin.init({}),
-    //FeedbackPlugin.init(),
+    // LandingPagePlugin,
+    // PdfPrinterPlugin.init({}),
+    // FeedbackPlugin.init(),
+    DefaultSchedulerPlugin.init(),
+    GraphiqlPlugin.init(),
     MultivendorPlugin.init({
       platformFeePercent: 5,
       platformFeeSKU: "FEE",
@@ -324,7 +315,7 @@ export const config: VendureConfig = {
     AdminUiPlugin.init({
       route: "admin",
       port: 3002,
-      app: customAdminUi({ recompile: IS_DEV, devMode: IS_DEV }),
+      // app: customAdminUi({ recompile: IS_DEV, devMode: IS_DEV }),
       adminUiConfig: {
         defaultLanguage: LanguageCode.fi,
         availableLanguages: [LanguageCode.fi, LanguageCode.en],
