@@ -9,6 +9,7 @@ import {
 import {
   PaytrailClient,
   type CreateSiSPaymentRequest,
+  type Item
 } from "@paytrail/paytrail-js-sdk";
 import { PaytrailData, PaytrailItem } from "./types";
 import { generateOrderLines, generateMultiOrderLines } from "./helpers";
@@ -24,7 +25,6 @@ export class PaytrailService {
 
   async createPayment(ctx: RequestContext, order: Order): Promise<any> {
     Logger.debug("createPayment() invoked", loggerCtx);
-    const url = process.env.STOREFRONT;
     try {
       //TODO replace with args from control panel
       const paytrail = new PaytrailClient({
@@ -58,13 +58,12 @@ export class PaytrailService {
         productCode: "shipping",
         description: "palvelu maksu",
       };
-
       data.items.push(orderShippingItem);
-      // Logger.debug(JSON.stringify(data, null, 2), loggerCtx);
+      
       console.log(JSON.stringify(data, null, 2));
       const paytrailRes = await paytrail.createPayment(data);
       console.log(paytrailRes);
-      Logger.debug(JSON.stringify(paytrailRes, null, 2), loggerCtx);
+      
       if (paytrailRes.status === 400) {
         return {
           amount: order.totalWithTax,
@@ -125,8 +124,7 @@ export class PaytrailService {
           ctx
         ),
         customer: {
-          //@ts-ignore
-          email: order.customer.emailAddress,
+          email: order.customer!.emailAddress,
         },
         redirectUrls: {
           success: `${process.env.paytrail_success_redirect}/${order.code}`,
@@ -134,7 +132,7 @@ export class PaytrailService {
         },
       };
 
-      const orderShippingItem: any = {
+      const orderShippingItem: Item = {
         unitPrice: order.shippingWithTax,
         units: 1,
         vatPercentage: 0,
@@ -146,7 +144,7 @@ export class PaytrailService {
       };
       data.items!.push(orderShippingItem);
 
-      console.log(data);
+      console.log(JSON.stringify(data));
       const paytrailRes = await paytrail.createShopInShopPayment(data);
       console.log(paytrailRes)
 

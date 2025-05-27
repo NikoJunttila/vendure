@@ -74,17 +74,20 @@ export class MultivendorSellerStrategy implements OrderSellerStrategy {
     order: Order
   ): Promise<SplitOrderContents[]> {
     //make sellerchannel available
-    await this.entityHydrator.hydrate(ctx, order,{
-      relations: ["lines.sellerChannel"]  
-    })
+    await this.entityHydrator.hydrate(ctx, order, {
+      relations: ["lines.sellerChannel"],
+    });
 
     let uniqueSellers: string[] = [];
     for (const c of order.lines) {
-      if (c.sellerChannel?.token && !uniqueSellers.includes(c.sellerChannel?.token)) {
+      if (
+        c.sellerChannel?.token &&
+        !uniqueSellers.includes(c.sellerChannel?.token)
+      ) {
         uniqueSellers.push(c.sellerChannel.token);
       }
     }
-    order.customFields.vendorAmount = uniqueSellers.length
+    order.customFields.vendorAmount = uniqueSellers.length;
     const partialOrders = new Map<ID, any>();
     for (const line of order.lines) {
       const sellerChannelId = line.sellerChannelId;
@@ -146,13 +149,14 @@ export class MultivendorSellerStrategy implements OrderSellerStrategy {
         relations: ["seller"],
       });
       // Apply the custom fields from the default order
-      const vasteCode = await vendureDataToVaste(
-        aggregateOrder,
-        sellerChannel.seller
-      );
-      sellerOrder.customFields = { ...aggregateOrder.customFields };
+      //TODO fix vaste backend
+      // const vasteCode = await vendureDataToVaste(
+      //   aggregateOrder,
+      //   sellerChannel.seller
+      // );
+      // sellerOrder.customFields = { ...aggregateOrder.customFields };
 
-      sellerOrder.customFields.VasteCode = vasteCode;
+      // sellerOrder.customFields.VasteCode = vasteCode;
 
       // Add platform fee surcharge
       sellerOrder.surcharges = [
@@ -161,6 +165,18 @@ export class MultivendorSellerStrategy implements OrderSellerStrategy {
 
       await this.orderService.applyPriceAdjustments(ctx, sellerOrder);
       // Add payment method
+      console.log({
+        method: paymentMethod.code,
+        metadata: {
+          channelToken: defaultChannel.token,
+          transfer_group: aggregateOrder.code,
+          connectedAccountId:
+            sellerChannel.seller?.customFields.connectedAccountId,
+          orderId: aggregateOrder.id,
+          orderCode: aggregateOrder.code,
+          paymentMethod: aggregateOrder.payments[0].method,
+        },
+      });
       const result = await this.orderService.addPaymentToOrder(
         ctx,
         sellerOrder.id,
@@ -177,7 +193,7 @@ export class MultivendorSellerStrategy implements OrderSellerStrategy {
           },
         }
       );
-
+      console.log(result);
       if (isGraphQlErrorResult(result)) {
         throw new InternalServerError(result.message);
       }
