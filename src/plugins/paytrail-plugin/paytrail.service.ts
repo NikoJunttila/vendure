@@ -13,7 +13,7 @@ import {
 import { PaytrailData, PaytrailItem } from "./types";
 import { generateOrderLines, generateMultiOrderLines } from "./helpers";
 import { loggerCtx } from "./constants";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class PaytrailService {
@@ -34,9 +34,8 @@ export class PaytrailService {
         platformName: "Jatulintarhashop",
       });
 
-      let newUUID = uuidv4();
       const data: PaytrailData = {
-        stamp: `${newUUID}`,
+        stamp: `${randomUUID()}`,
         reference: order.code,
         amount: order.totalWithTax,
         currency: "EUR",
@@ -61,9 +60,10 @@ export class PaytrailService {
       };
 
       data.items.push(orderShippingItem);
-      Logger.debug(JSON.stringify(data, null, 2), loggerCtx);
+      // Logger.debug(JSON.stringify(data, null, 2), loggerCtx);
+      console.log(JSON.stringify(data, null, 2));
       const paytrailRes = await paytrail.createPayment(data);
-      //paytrail.createRefund()
+      console.log(paytrailRes);
       Logger.debug(JSON.stringify(paytrailRes, null, 2), loggerCtx);
       if (paytrailRes.status === 400) {
         return {
@@ -104,18 +104,16 @@ export class PaytrailService {
         secretKey: process.env.PAYTRAIL_SHOP_IN_SHOP_KEY,
         platformName: "JatulintarhaShop",
       });
-
       //TODO GET FROM SELLER CUSTOM FIELDS
       const defaultMerchant: string | undefined = process.env.MERCHANT;
       if (!defaultMerchant) console.error("no merchant set");
-      /*         for (const line of order.lines){
-            if(line.sellerChannelId){
-                const seller = await this.sellerService.findOne(ctx,line.sellerChannelId)
-            }
-        } */
-      const newUUID = uuidv4();
+      /*for (const line of order.lines){
+          if(line.sellerChannelId){
+              const seller = await this.sellerService.findOne(ctx,line.sellerChannelId)
+          }
+      }*/
       const data: CreateSiSPaymentRequest = {
-        stamp: `${newUUID}`,
+        stamp: `${randomUUID()}`,
         reference: order.code,
         amount: order.totalWithTax,
         currency: "EUR",
@@ -141,15 +139,16 @@ export class PaytrailService {
         units: 1,
         vatPercentage: 0,
         productCode: "shipping",
-        description: "palvelu maksu",
+        description: "kuljetus",
+        stamp: `${randomUUID()}`,
+        reference: `${randomUUID()}`,
         merchant: defaultMerchant,
-        stamp: uuidv4(),
-        reference: uuidv4(),
       };
       data.items!.push(orderShippingItem);
 
-      console.log(JSON.stringify(data, null, 2));
+      console.log(data);
       const paytrailRes = await paytrail.createShopInShopPayment(data);
+      console.log(paytrailRes)
 
       if (paytrailRes.status === 400) {
         return {

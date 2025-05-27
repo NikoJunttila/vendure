@@ -30,6 +30,7 @@ import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugi
 import { customAdminUi } from "./compile-admin-ui";
 import { ExtraItemPriceStrategy } from "./price-calculation-strategy";
 import { MultiSinglePayment } from "./shipping/shipping-methods/multi-vendor-single";
+import { requestLogger } from "./middleware/shop-api-logger";
 
 import "dotenv/config";
 import path from "path";
@@ -44,7 +45,16 @@ export const config: VendureConfig = {
     port: serverPort,
     adminApiPath: "admin-api",
     shopApiPath: "shop-api",
-    middleware: [],
+    middleware: [
+      ...(process.env.LOG_SHOP_QUERIES
+        ? [
+            {
+              route: "/shop-api",
+              handler: requestLogger,
+            },
+          ]
+        : []),
+    ],
     // The following options are useful in development mode,
     // but are best turned off for production for security
     // reasons.
@@ -92,7 +102,11 @@ export const config: VendureConfig = {
     paymentMethodHandlers: [dummyPaymentHandler],
   },
   shippingOptions: {
-    shippingCalculators: [PickupFromStorePayment, defaultShippingCalculator, MultiSinglePayment],
+    shippingCalculators: [
+      PickupFromStorePayment,
+      defaultShippingCalculator,
+      MultiSinglePayment,
+    ],
     shippingEligibilityCheckers: [PickupStore],
     fulfillmentHandlers: [manualFulfillmentHandler],
   },

@@ -1,6 +1,6 @@
 import { OrderLine} from "@vendure/core";
 import { PaytrailItem } from "./types";
-import {v4 as uuidv4} from 'uuid';
+import {randomUUID} from "crypto"
 
 interface Seller {
     customFields: {
@@ -48,6 +48,7 @@ export const generateMultiOrderLines = async (
                 // Use seller's PaytrailMerchantId if available, otherwise fall back to default
                 merchantId = seller?.customFields?.PaytrailMerchantId || defaultMerchant;
             }
+            console.log("merchant id ",merchantId)
 
             return {
                 unitPrice: line.unitPriceWithTax,
@@ -55,8 +56,8 @@ export const generateMultiOrderLines = async (
                 vatPercentage: line.taxRate,
                 productCode: line.productVariant.sku,
                 description: "testing",
-                stamp: uuidv4(),
-                reference: uuidv4(),
+                stamp: `${randomUUID()}`,
+                reference: `${randomUUID()}`,
                 merchant: merchantId,
                 commission: {
                     merchant: merchantId,
