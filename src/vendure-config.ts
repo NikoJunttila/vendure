@@ -10,6 +10,7 @@ import {
   LanguageCode,
   Middleware,
   MiddlewareHandler,
+  DefaultGuestCheckoutStrategy,
 } from "@vendure/core";
 import { EmailPlugin, FileBasedTemplateLoader } from "@vendure/email-plugin";
 import { EmailHandlers } from "./Email/Emailhandler";
@@ -45,6 +46,15 @@ export const config: VendureConfig = {
     port: serverPort,
     adminApiPath: "admin-api",
     shopApiPath: "shop-api",
+    cors: {
+      origin: [
+        "http://localhost:5173",
+        "https://matava.swedencentral.cloudapp.azure.com:3567",
+        "https://store.junttila.dev",
+        "https://storefront-nikojunttilas-projects.vercel.app",
+      ],
+      credentials: true, // This is crucial for cookies
+    },
     middleware: [
       ...(process.env.LOG_SHOP_QUERIES
         ? [
@@ -83,6 +93,9 @@ export const config: VendureConfig = {
         shop: "session",
         admin: "admin-session",
       },
+      httpOnly: true,
+      sameSite: "none", // Required for cross-origin (Vercel -> your server)
+      secure: true, // Required when sameSite is 'none'
     },
   },
   dbConnectionOptions: {
@@ -112,6 +125,11 @@ export const config: VendureConfig = {
   },
   orderOptions: {
     orderItemPriceCalculationStrategy: new ExtraItemPriceStrategy(),
+    guestCheckoutStrategy: new DefaultGuestCheckoutStrategy({
+      allowGuestCheckouts: true,
+      allowGuestCheckoutForRegisteredCustomers: true,
+    }),
+    orderItemsLimit: 100,
   },
   customFields: {
     Product: [
@@ -319,7 +337,6 @@ export const config: VendureConfig = {
       ),
       globalTemplateVars: {
         // The following variables will change depending on your storefront implementation.
-        // Here we are assuming a storefront running at http://localhost:8080.
         fromAddress: '"example" <noreply@example.com>',
         verifyEmailAddressUrl: URL + "/verify",
         passwordResetUrl: URL + "/password-reset",
