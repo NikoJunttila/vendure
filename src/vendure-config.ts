@@ -52,6 +52,7 @@ export const config: VendureConfig = {
         "https://matava.swedencentral.cloudapp.azure.com:3567",
         "https://store.junttila.dev",
         "https://storefront-nikojunttilas-projects.vercel.app",
+        "https://storefront-ten-delta.vercel.app"
       ],
       credentials: true, // This is crucial for cookies
     },
