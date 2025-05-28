@@ -37,7 +37,7 @@ import path from "path";
 
 const IS_DEV = process.env.APP_ENV === "dev";
 const serverPort = +process.env.PORT || 3000;
-const URL = !IS_DEV ? process.env.PROD_URL : "http://localhost:5173";
+const URL = !IS_DEV ? process.env.CLIENT_URL : "http://localhost:5173";
 
 export const config: VendureConfig = {
   //logger: new DefaultLogger({ level: LogLevel.Debug, timestamp: false }),
@@ -305,7 +305,7 @@ export const config: VendureConfig = {
       // For local dev, the correct value for assetUrlPrefix should
       // be guessed correctly, but for production it will usually need
       // to be set manually to match your production url.
-      assetUrlPrefix: IS_DEV ? undefined : URL + "/assets/",
+      assetUrlPrefix: IS_DEV ? undefined : process.env.BACKEND_URL + "/assets/",
     }),
     DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),
     DefaultSearchPlugin.init({ bufferUpdates: false, indexStockStatus: true }),
