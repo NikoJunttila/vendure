@@ -285,7 +285,7 @@ export const config: VendureConfig = {
     ],
   },
   plugins: [
-    // LandingPagePlugin,
+    LandingPagePlugin,
     // PdfPrinterPlugin.init({}),
     // FeedbackPlugin.init(),
     DefaultSchedulerPlugin.init(),
