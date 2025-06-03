@@ -32,6 +32,7 @@ import { customAdminUi } from "./compile-admin-ui";
 import { ExtraItemPriceStrategy } from "./price-calculation-strategy";
 import { MultiSinglePayment } from "./shipping/shipping-methods/multi-vendor-single";
 import { requestLogger } from "./middleware/shop-api-logger";
+import { AllAccessOrderByCodeAccessStrategy } from "./order-by-code-strat";
 
 import "dotenv/config";
 import path from "path";
@@ -41,7 +42,7 @@ const serverPort = +process.env.PORT || 3000;
 const URL = !IS_DEV ? process.env.CLIENT_URL : "http://localhost:5173";
 
 export const config: VendureConfig = {
-  //logger: new DefaultLogger({ level: LogLevel.Debug, timestamp: false }),
+  logger: new DefaultLogger({ level: LogLevel.Debug, timestamp: false }),
   apiOptions: {
     port: serverPort,
     adminApiPath: "admin-api",
@@ -57,6 +58,7 @@ export const config: VendureConfig = {
       credentials: true, // This is crucial for cookies
     },
     middleware: [
+      //logger for showing queries info
       ...(process.env.LOG_SHOP_QUERIES
         ? [
             {
@@ -94,9 +96,9 @@ export const config: VendureConfig = {
         shop: "session",
         admin: "admin-session",
       },
-      httpOnly: true,
-      sameSite: "none", // Required for cross-origin (Vercel -> your server)
-      secure: true, // Required when sameSite is 'none'
+      httpOnly: IS_DEV ? false : true,  
+      sameSite: IS_DEV ? "lax" : "none", // Required for cross-origin (Vercel -> your server)
+      secure: IS_DEV ? false : true, // Required when sameSite is 'none'
     },
   },
   dbConnectionOptions: {
@@ -125,6 +127,7 @@ export const config: VendureConfig = {
     fulfillmentHandlers: [manualFulfillmentHandler],
   },
   orderOptions: {
+    // orderByCodeAccessStrategy: new AllAccessOrderByCodeAccessStrategy(),
     orderItemPriceCalculationStrategy: new ExtraItemPriceStrategy(),
     guestCheckoutStrategy: new DefaultGuestCheckoutStrategy({
       allowGuestCheckouts: true,
