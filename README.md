@@ -25,7 +25,7 @@ stripe login
 stripe listen --forward-to localhost:3000/payments/stripe
 
 stripe keys should look like this: 
-apikey: sk_test_51N0PJMLdD2UuHgNTnBFTGoto84dK4A2mbwtqkDtRsor9xj8ePWvS2PPRIs9gWheT7rU2N7daJztzlJi0vhYPHQS700
-webhook secret: whsec_21fedcd595c410109e179de7a185327e44f2117217d23c56cb779a84c82cb
+apikey: sk_test_51N0P...
+webhook secret: whsec_21fed...
 added in admin control panel stripe method: 
-client needs this: PUBLIC_STRIPE_KEY=pk_test_51N0PJMLdD2UuHgNTv0b3jCVH5Qoh9A8shgkCkFvFA5QyQ28BaIt2t7vHIF7U3fdZO7PVzDVwKBLNlBH3nFJhiNHU00
+client needs this: PUBLIC_STRIPE_KEY=pk_test_51N0PJMLd...
