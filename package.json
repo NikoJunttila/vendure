@@ -17,6 +17,7 @@
   "dependencies": {
     "@apollo/datasource-rest": "^6.4.1",
     "@paytrail/paytrail-js-sdk": "^1.0.3",
+    "@pinelab/vendure-plugin-popularity-scores": "^1.9.0",
     "@vendure/admin-ui-plugin": "3.3.1",
     "@vendure/asset-server-plugin": "3.3.1",
     "@vendure/core": "3.3.1",

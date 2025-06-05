@@ -26,6 +26,7 @@ import { PickupFromStorePayment } from "./shipping/shipping-methods/pickupPaymen
 import { VastePlugin } from "./plugins/vaste-plugin/vaste.plugin";
 import { MultivendorPlugin } from "./plugins/multivendor-plugin/multivendor.plugin";
 import { LandingPagePlugin } from "./plugins/landing-page-plugin.ts/landing-page-plugin";
+import { PopularityScoresPlugin } from "@pinelab/vendure-plugin-popularity-scores";
 import { FeedbackPlugin } from "./plugins/feedback-plugin/feedback.plugin";
 import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugin";
 import { customAdminUi } from "./compile-admin-ui";
@@ -53,7 +54,7 @@ export const config: VendureConfig = {
         "https://matava.swedencentral.cloudapp.azure.com:3567",
         "https://store.junttila.dev",
         "https://storefront-nikojunttilas-projects.vercel.app",
-        "https://storefront-ten-delta.vercel.app"
+        "https://storefront-ten-delta.vercel.app",
       ],
       credentials: true, // This is crucial for cookies
     },
@@ -96,7 +97,7 @@ export const config: VendureConfig = {
         shop: "session",
         admin: "admin-session",
       },
-      httpOnly: IS_DEV ? false : true,  
+      httpOnly: IS_DEV ? false : true,
       sameSite: IS_DEV ? "lax" : "none", // Required for cross-origin (Vercel -> your server)
       secure: IS_DEV ? false : true, // Required when sameSite is 'none'
     },
@@ -308,6 +309,12 @@ export const config: VendureConfig = {
   },
   plugins: [
     LandingPagePlugin,
+    //to update popularity send GET to this url: http://localhost:3000/popularity-scores/calculate-scores/ywolzlwse9m2cuwcx2/test <channel token>/<endointsecret>
+    PopularityScoresPlugin.init({
+      endpointSecret: "test",
+      productFieldUiTab: "Scores",
+      collectionFieldUiTab: "Scores",
+    }),
     // PdfPrinterPlugin.init({}),
     // FeedbackPlugin.init(),
     DefaultSchedulerPlugin.init(),

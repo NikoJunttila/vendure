@@ -7,8 +7,6 @@ add stripe payment and paytrail payment methods
 <br>
 add "multi" to all shipping methods when doing multi vendor.
 
-
-
 for react dashboard npx vite 
 <br>
 hosting:

@@ -17,6 +17,7 @@ import path from 'path';
                 req.url.indexOf('/assets') !== 0 &&
                 req.url.indexOf('/stripe') !== 0 &&
                 req.url.indexOf('/payments') !== 0 &&
+                req.url.indexOf('/popularity-scores') !== 0 &&
                 req.url.indexOf('/storefront') !== 0) {
                 // redirecting to Admin UI by default
                 return res.redirect('/admin')
