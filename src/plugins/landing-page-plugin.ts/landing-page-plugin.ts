@@ -1,6 +1,5 @@
 import { VendurePlugin } from '@vendure/core';
 import { RequestHandler } from 'express';
-import path from 'path';
 
 /**
  * This plugin just serves the index.html file at the root.

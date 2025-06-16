@@ -1,3 +1,4 @@
+import { compileUiExtensions } from '@vendure/ui-devkit/compiler';
 import {
   dummyPaymentHandler,
   DefaultJobQueuePlugin,
@@ -29,15 +30,16 @@ import { LandingPagePlugin } from "./plugins/landing-page-plugin.ts/landing-page
 import { PopularityScoresPlugin } from "@pinelab/vendure-plugin-popularity-scores";
 import { FeedbackPlugin } from "./plugins/feedback-plugin/feedback.plugin";
 import { PdfPrinterPlugin } from "./plugins/pdf-printer-plugin/pdf-printer.plugin";
+import { TimeslotPlugin } from './plugins/timeslot/timeslot.plugin';
 import { customAdminUi } from "./compile-admin-ui";
 import { ExtraItemPriceStrategy } from "./price-calculation-strategy";
 import { MultiSinglePayment } from "./shipping/shipping-methods/multi-vendor-single";
 import { requestLogger } from "./middleware/shop-api-logger";
 import { AllAccessOrderByCodeAccessStrategy } from "./order-by-code-strat";
+import { ChannelProductPlugin } from './plugins/channel-product/ChannelProductPlugin';
 
 import "dotenv/config";
 import path from "path";
-
 const IS_DEV = process.env.APP_ENV === "dev";
 const serverPort = +process.env.PORT || 3000;
 const URL = !IS_DEV ? process.env.CLIENT_URL : "http://localhost:5173";
@@ -308,6 +310,8 @@ export const config: VendureConfig = {
     ],
   },
   plugins: [
+    TimeslotPlugin.init({}),
+    ChannelProductPlugin,
     LandingPagePlugin,
     //to update popularity send GET to this url: http://localhost:3000/popularity-scores/calculate-scores/ywolzlwse9m2cuwcx2/test <channel token>/<endointsecret>
     PopularityScoresPlugin.init({
@@ -363,5 +367,5 @@ export const config: VendureConfig = {
         availableLanguages: [LanguageCode.fi, LanguageCode.en],
       },
     }),
-  ],
+],
 };
