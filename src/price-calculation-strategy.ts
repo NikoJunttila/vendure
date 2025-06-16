@@ -22,7 +22,7 @@ export class ExtraItemPriceStrategy
     let price = productVariant.listPrice;
     let opt = customFields.extraoptions;
 
-    if (customFields.extraoptions && opt.enabled && opt.extrachoices) {
+    if (opt && opt.enabled && opt.extrachoices) {
       //extraoptions: { enabled: true, extrachoices: 'pekoni:200,kebab:300' }
       //const arr = [{name:"pekoni",price:200},{name:"kebab",price:300},{name:"cheese",price:400}]
       const arr = opt.extrachoices.split(",").map((item) => {

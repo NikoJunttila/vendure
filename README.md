@@ -1,4 +1,6 @@
-use: npx vendure migrate
+1. create postgres database
+2. run: npx vendure migrate twice
+3. npm run dev
 
 For admin panel setup.
 <br>
